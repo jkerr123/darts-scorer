@@ -9,7 +9,7 @@ __author__ = 'jamie'
 
 @app.route("/")
 def run():
-    return render_template("index.html")
+    return render_template("index.html", message="test")
 
 if __name__ == "__main__":
     app.run()
