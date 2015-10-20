@@ -1,18 +1,15 @@
-import logging
 from flask import Flask, render_template
 import pymongo
-import sys
+from src.models.database import Database
 
 app = Flask(__name__)
-
-app.logger.addHandler(logging.StreamHandler(sys.stdout))
-app.logger.setLevel(logging.ERROR)
 
 __author__ = 'jamie'
 
 
-@app.route("/")
-def run():
+@app.before_first_request
+def init_app():
+    Database
     return render_template("index.html", message="test")
 
 if __name__ == "__main__":
