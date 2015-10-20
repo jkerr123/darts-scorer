@@ -8,7 +8,7 @@ __author__ = 'jamie'
 
 
 @app.route("/")
-def hello():
+def run():
     return render_template("index.html")
 
 if __name__ == "__main__":
