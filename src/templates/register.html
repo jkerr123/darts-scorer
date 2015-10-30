@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+{{message}}
+<form id="register" action="auth/register" method="POST">
+    Email: <input type="text" name="email"><br>
+    Password: <input type="password" name="password"><br>
+    Terms & conditions <textarea readonly>Terms & Conditions
+    1. User Feedback
+    By registering for this darts scoring application, you agree to allow the developer to use
+    any feedback given as part of a final project report, to be submitted on Monday 2nd May
+    2016. Your personal details will remain anonymous to ensure strict confidentiality. You
+    also agree to allow the developer to implement any future functionality that you may
+    suggest.
+    2. Website Usage
+    When using the darts scorer, you should not:
+    • Utilise web scripting to gain an unfair advantage
+    • Advertise the website as your own
+    • Allow others to access your account
+    3. Website Functionality
+    The developer is under no obligation to provide specific functionality of the darts scorer.
+    The functionality and features of the darts scorer is subject to change without any prior
+    notice from the developer.
+    4. User Content
+    You agree that any content posted by you does not violate the intellectual property rights
+    of others, and that you have the rights to post this content. The developer reserves the
+    right to remove any user content at any time, without question.
+    If you have any questions or concerns, please email me at j.w.kerr@dundee.ac.uk</textarea><br><br>
+    <input type="checkbox" name="agreeterms" value="agreeterms">I have read and agree to the terms & conditions<br>
+    <input type="checkbox" name="agreefeedback" value="agreefeedback">I give the developer permission to use any
+feedback I give as part of their university honours project final report<br>
+    <button type="submit">Register Account</button>
+
+</form>
+</body>
+</html>

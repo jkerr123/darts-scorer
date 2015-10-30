@@ -9,7 +9,10 @@ class User(object):
 
     @staticmethod
     def register_user(email, password):
-        Database.insert(COLLECTION, {"email": email, "password": password})
+        if Database.insert(COLLECTION, {"email": email, "password": password}):
+            return True
+
+        return False
 
     @staticmethod
     def find_user(email):
