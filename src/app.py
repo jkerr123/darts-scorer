@@ -1,3 +1,4 @@
+import os
 from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, send_file, \
     Response
 from database import Database
@@ -9,6 +10,7 @@ app = Flask(__name__)
 __author__ = 'jamie'
 
 MONGODB_URI = 'mongodb://heroku_plq17kjt:au06mdnk5ll4tq8dudvfccu89d@ds041934.mongolab.com:41934/heroku_plq17kjt'
+app.secret_key = os.urandom(24)
 
 
 def setup_database():
@@ -17,6 +19,8 @@ def setup_database():
 
 @app.route('/')
 def home_page():
+    if 'email' in session:
+        return render_template("index.html", message = "You are logged in as " + session['email'])
     return render_template("index.html")
 
 
@@ -27,13 +31,13 @@ def register_page():
 
 @app.route('/auth/register', methods=["POST"])
 def register_user():
-    email = request.form.get['email']
-    password = sha256(request.form.get['password'].encode('utf-8')).hexdigest()
+    email = request.form['email']
+    password = sha256(request.form['password'].encode('utf-8')).hexdigest()
     if User.register_user(email, password):
         session['email'] = email
-        return redirect(url_for('home_page', message="You have been registered"))
+        return redirect(url_for('home_page'))
     else:
-        return redirect(url_for('register_page', message="User exists"))
+        return redirect(url_for('register_page'))
 
 
 @app.before_first_request
