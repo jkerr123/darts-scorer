@@ -1,7 +1,6 @@
 pymongo
 beautifulsoup4
 eventlet
-itsdangerous
 Flask==0.10.1
 Flask_SocketIO
 itsdangerous==0.24
