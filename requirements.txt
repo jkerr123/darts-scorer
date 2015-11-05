@@ -12,3 +12,6 @@ itsdangerous
 Jinja2
 MarkupSafe
 six
+gevent==1.0.2
+gevent-socketio==0.3.6
+gevent-websocket==0.9.5
