@@ -1,5 +1,8 @@
 Flask==0.10.1
-uwsgi
+Flask_SocketIO
 werkzeug
 pymongo
 beautifulsoup4
+python-socketio
+python-engineio
+eventlet
