@@ -1,4 +1,5 @@
 from flask import session
+from flask_socketio import SocketIO
 from flask_socketio import join_room, emit
 import socketio
 
@@ -18,5 +19,6 @@ def joined(message):
 def message_received(message):
     room = session['room']
     emit('message received', {'message': session.get('name') + ':' + message['msg']}, room=room)
+
 
 

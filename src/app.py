@@ -2,6 +2,8 @@ import os
 from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, send_file, \
     Response
 from flask_socketio import SocketIO
+from flask_socketio import join_room, emit
+import socketio
 
 from database import Database
 from _sha256 import sha256
@@ -49,6 +51,8 @@ def register_user():
         return redirect(url_for('home_page'))
     else:
         return redirect(url_for('register_page'))
+
+
 
 
 @app.before_first_request
