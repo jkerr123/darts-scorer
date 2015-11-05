@@ -1,1 +1,0 @@
-web: gunicorn darts-scorer:app --worker-class eventlet
