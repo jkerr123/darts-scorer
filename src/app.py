@@ -5,8 +5,8 @@ from flask.ext.socketio import SocketIO, emit
 
 
 from _sha256 import sha256
-from src.models.database import Database
-from src.models.user import User
+from database import Database
+from user import User
 
 app = Flask(__name__)
 
