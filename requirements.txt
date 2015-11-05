@@ -13,5 +13,4 @@ Jinja2
 MarkupSafe
 six
 gevent
-gevent-socketio
 gevent-websocket
