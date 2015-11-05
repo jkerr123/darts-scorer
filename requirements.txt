@@ -6,7 +6,7 @@ beautifulsoup4
 python-socketio
 python-engineio
 eventlet
-gunicorn
+gunicorn==0.16.1
 greenlet
 itsdangerous
 Jinja2
