@@ -3,8 +3,6 @@ Flask_SocketIO
 werkzeug
 pymongo
 beautifulsoup4
-python-socketio
-python-engineio
 eventlet
 gunicorn
 greenlet
@@ -12,5 +10,3 @@ itsdangerous
 Jinja2
 MarkupSafe
 six
-gevent
-gevent-websocket
