@@ -1,1 +1,1 @@
-web: gunicorn --worker-class socketio.sgunicorn.GeventSocketIOWorker --log-file=- darts-scorer:app
+web: gunicorn darts-scorer:app --worker-class eventlet
