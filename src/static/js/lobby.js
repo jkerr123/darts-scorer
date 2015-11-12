@@ -1,8 +1,7 @@
             var socket;
             $(document).ready(function(){
-                socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
-                if(window.location.protocol==="https:")
-             window.location.protocol="http";
+                socket = io.connect('wss://' + document.domain + ':' + location.port + '/chat');
+
                 socket.on('connect', function() {
                     socket.emit('joined');
                 });
