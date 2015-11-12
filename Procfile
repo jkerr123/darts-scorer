@@ -1,1 +1,1 @@
-web: gunicorn --worker-class eventlet darts-scorer:app
+web: gunicorn --worker-class eventlet app:app
