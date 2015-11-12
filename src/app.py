@@ -1,7 +1,8 @@
+from functools import wraps
 from hashlib import sha256
 import os
 from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, send_file, \
-    Response
+    Response, current_app
 from flask_socketio import SocketIO, emit
 
 from src.models.database import Database
@@ -14,6 +15,20 @@ __author__ = 'jamie'
 MONGODB_URI = 'mongodb://heroku_plq17kjt:au06mdnk5ll4tq8dudvfccu89d@ds041934.mongolab.com:41934/heroku_plq17kjt'
 app.secret_key = os.urandom(24)
 socketio = SocketIO(app)
+
+
+def ssl_required(fn):
+    @wraps(fn)
+    def decorated_view(*args, **kwargs):
+        if current_app.config.get("SSL"):
+            if request.is_secure:
+                return fn(*args, **kwargs)
+            else:
+                return redirect(request.url.replace("http://", "https://"))
+
+        return fn(*args, **kwargs)
+
+    return decorated_view
 
 
 
@@ -51,6 +66,7 @@ def register_user():
 
 
 @socketio.on('joined', namespace='/chat')
+@ssl_required
 def joined():
     """Sent by clients when they enter a room.
     A status message is broadcast to all people in the room."""
@@ -59,6 +75,7 @@ def joined():
 
 
 @socketio.on('message', namespace='/chat')
+@ssl_required
 def message_received(message):
     user = session['email']
     emit('message received', {'message': user + ': ' + message['msg']}, broadcast=True)
