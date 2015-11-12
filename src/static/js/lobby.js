@@ -1,5 +1,8 @@
             var socket;
             $(document).ready(function(){
+
+             if(window.location.protocol==="https:")
+             window.location.protocol="http";
                 socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
                 socket.on('connect', function() {
                     socket.emit('joined');
@@ -28,9 +31,5 @@
                 });
             });
 
-             window.onload=function(){
-     $(function(){
-         if(window.location.protocol==="https:")
-             window.location.protocol="http";
-     });
- }
+
+
