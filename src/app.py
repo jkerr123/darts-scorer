@@ -4,8 +4,8 @@ from flask import Flask, session, jsonify, request, render_template, redirect, u
     Response
 from flask_socketio import SocketIO, emit
 
-from database import Database
-from user import User
+from src.models.database import Database
+from src.models.user import User
 
 app = Flask(__name__)
 
