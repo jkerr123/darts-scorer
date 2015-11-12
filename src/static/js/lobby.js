@@ -1,6 +1,6 @@
             var socket;
             $(document).ready(function(){
-                socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+                socket = io.connect('https://' + document.domain + ':' + location.port + '/chat');
                 socket.on('connect', function() {
                     socket.emit('joined');
                 });
