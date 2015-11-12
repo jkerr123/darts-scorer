@@ -1,9 +1,11 @@
+from hashlib import sha256
 import os
 from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, send_file, \
     Response
-from flask.ext.socketio import SocketIO, join_room, emit
+from flask.ext.socketio import SocketIO, emit
+
+
 from database import Database
-from _sha256 import sha256
 from user import User
 
 app = Flask(__name__)
