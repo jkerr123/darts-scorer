@@ -6,6 +6,7 @@
                 });
 
                 socket.on('status', function(data) {
+                    $('#player-list').append(new Option(data.user, data.user))
                     $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
                     $('#chat').scrollTop($('#chat')[0].scrollHeight);
                 });

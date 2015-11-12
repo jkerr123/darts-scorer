@@ -53,14 +53,14 @@ def register_user():
 def joined():
     """Sent by clients when they enter a room.
     A status message is broadcast to all people in the room."""
-
-    emit('status', {'msg': 'Jamie has entered the room.'})
+    user = session['email']
+    emit('status', {'msg': user + ' has entered the room.', 'user': user}, broadcast=True)
 
 
 @socketio.on('message', namespace='/chat')
 def message_received(message):
-
-    emit('message received', {'message': 'Jamie' + ':' + message['msg']})
+    user = session['email']
+    emit('message received', {'message': user + ': ' + message['msg']}, broadcast=True)
 
 
 
@@ -69,4 +69,4 @@ def init_app():
     setup_database()
 
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0')
