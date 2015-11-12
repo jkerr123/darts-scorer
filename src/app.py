@@ -84,4 +84,4 @@ def init_app():
     setup_database()
 
 if __name__ == "__main__":
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0')
