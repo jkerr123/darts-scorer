@@ -4,6 +4,7 @@ import os
 from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, send_file, \
     Response, current_app
 from flask_socketio import SocketIO, emit
+from flask_sslify import SSLify
 
 from src.models.database import Database
 from src.models.user import User
@@ -14,6 +15,7 @@ __author__ = 'jamie'
 
 MONGODB_URI = 'mongodb://heroku_plq17kjt:au06mdnk5ll4tq8dudvfccu89d@ds041934.mongolab.com:41934/heroku_plq17kjt'
 app.secret_key = os.urandom(24)
+sslify = SSLify(app)
 socketio = SocketIO(app)
 
 
