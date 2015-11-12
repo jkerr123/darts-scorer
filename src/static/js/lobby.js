@@ -6,7 +6,9 @@
                 });
 
                 socket.on('status', function(data) {
-                    $('#player-list').append(new Option(data.user, data.user))
+                    data.userlist.forEach(function(user) {
+                    $('#player-list').append(new Option(user, user))
+                    });
                     $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
                     $('#chat').scrollTop($('#chat')[0].scrollHeight);
                 });
@@ -25,3 +27,10 @@
                     }
                 });
             });
+
+             window.onload=function(){
+     $(function(){
+         if(window.location.protocol==="https:")
+             window.location.protocol="http";
+     });
+ }
