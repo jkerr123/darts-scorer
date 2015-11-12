@@ -2,8 +2,7 @@ from hashlib import sha256
 import os
 from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, send_file, \
     Response
-from flask.ext.socketio import SocketIO, emit
-
+from flask_socketio import SocketIO, emit
 
 from database import Database
 from user import User
@@ -71,4 +70,4 @@ def init_app():
     setup_database()
 
 if __name__ == "__main__":
-    socketio.run(app, host='0.0.0.0')
+    socketio.run(app)
