@@ -69,8 +69,7 @@ def joined():
     """Sent by clients when they enter a room.
     A status message is broadcast to all people in the room."""
     user = session['email']
-    connected_users.add(user)
-    emit('status', {'msg': user + ' has entered the room.', 'user': user, 'userlist': connected_users}, broadcast=True)
+    emit('status', {'msg': user + ' has entered the room.', 'user': user}, broadcast=True)
 
 
 @socketio.on('message', namespace='/chat')

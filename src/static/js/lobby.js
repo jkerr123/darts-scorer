@@ -1,17 +1,14 @@
             var socket;
             $(document).ready(function(){
-
-             if(window.location.protocol==="https:")
-             window.location.protocol="http";
                 socket = io.connect('http://' + document.domain + ':' + location.port + '/chat');
+                if(window.location.protocol==="https:")
+             window.location.protocol="http";
                 socket.on('connect', function() {
                     socket.emit('joined');
                 });
 
                 socket.on('status', function(data) {
-                    data.userlist.forEach(function(user) {
-                    $('#player-list').append(new Option(user, user))
-                    });
+
                     $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
                     $('#chat').scrollTop($('#chat')[0].scrollHeight);
                 });
@@ -30,6 +27,4 @@
                     }
                 });
             });
-
-
 
