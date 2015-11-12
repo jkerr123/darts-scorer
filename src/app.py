@@ -15,7 +15,7 @@ __author__ = 'jamie'
 
 MONGODB_URI = 'mongodb://heroku_plq17kjt:au06mdnk5ll4tq8dudvfccu89d@ds041934.mongolab.com:41934/heroku_plq17kjt'
 app.secret_key = os.urandom(24)
-sslify = SSLify(app)
+
 socketio = SocketIO(app)
 
 
@@ -64,7 +64,6 @@ def register_user():
 
 
 @socketio.on('joined', namespace='/chat')
-@ssl_required
 def joined():
     """Sent by clients when they enter a room.
     A status message is broadcast to all people in the room."""
@@ -73,7 +72,6 @@ def joined():
 
 
 @socketio.on('message', namespace='/chat')
-@ssl_required
 def message_received(message):
     user = session['email']
     emit('message received', {'message': user + ': ' + message['msg']}, broadcast=True)
