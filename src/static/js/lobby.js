@@ -1,13 +1,14 @@
             var socket;
             $(document).ready(function(){
-                socket = io.connect('https://' + document.domain + ':' + location.port + '/chat');
+                socket = io.connect('http://' + document.domain + ':' + location.port + '/chat', {'sync disconnect on unload':true});
 
                 socket.on('connect', function() {
                     socket.emit('joined');
                 });
 
-                socket.on('status', function(data) {
 
+                socket.on('status', function(data) {
+                    update_players(data.userlist);
                     $('#chat').val($('#chat').val() + '<' + data.msg + '>\n');
                     $('#chat').scrollTop($('#chat')[0].scrollHeight);
                 });
@@ -27,3 +28,15 @@
                 });
             });
 
+            $(window).bind('beforeunload', function(){
+  socket.emit("playerleft");
+});
+
+function update_players(players){
+    $('#player-list').empty();
+    for (var i = 0; i < players.length; i++) {
+
+        $("#player-list").append(new Option(players[i], players[i]));
+        }
+
+}

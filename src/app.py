@@ -18,7 +18,7 @@ app.secret_key = os.urandom(24)
 
 socketio = SocketIO(app)
 
-connected_users = set
+connected_users = list()
 
 def ssl_required(fn):
     @wraps(fn)
@@ -66,10 +66,9 @@ def register_user():
 
 @socketio.on('joined', namespace='/chat')
 def joined():
-    """Sent by clients when they enter a room.
-    A status message is broadcast to all people in the room."""
     user = session['email']
-    emit('status', {'msg': user + ' has entered the room.', 'user': user}, broadcast=True)
+    connected_users.append(user)
+    emit('status', {'msg': user + ' has entered the room.', 'user': user, 'userlist': connected_users}, broadcast=True)
 
 
 @socketio.on('message', namespace='/chat')
@@ -78,6 +77,11 @@ def message_received(message):
     emit('message received', {'message': user + ': ' + message['msg']}, broadcast=True)
 
 
+@socketio.on('playerleft', namespace='/chat')
+def disconnected():
+    user = session['email']
+    connected_users.remove(user)
+    emit('status', {'msg': user + ' has left the room.', 'user': user, 'userlist': connected_users}, broadcast=True)
 
 @app.before_first_request
 def init_app():
