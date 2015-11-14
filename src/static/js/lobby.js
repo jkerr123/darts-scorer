@@ -18,6 +18,21 @@
                     $('#chat').scrollTop($('#chat')[0].scrollHeight);
                 });
 
+                socket.on('challenged', function(data) {
+                    bootbox.confirm(data.msg, function(result) {
+                     if(result == true)
+                     {
+                        $('#chat').val($('#chat').val() + 'Game accepted!\n');
+                        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+                     }
+                    });
+                });
+
+                 $("#challenge").click(function(){
+                        var playertochallenge = $('#player-list').val();
+    socket.emit('challenge_player', {player: playertochallenge});
+                    });
+
                 $('#text').keypress(function(e) {
                     var code = e.keyCode || e.which;
                     if (code == 13) {
@@ -40,3 +55,4 @@ function update_players(players){
         }
 
 }
+

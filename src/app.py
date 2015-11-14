@@ -3,7 +3,7 @@ from hashlib import sha256
 import os
 from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, send_file, \
     Response, current_app
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room
 from flask_sslify import SSLify
 
 from src.models.database import Database
@@ -49,8 +49,7 @@ def register_page():
 
 @app.route('/player-lobby')
 def player_lobby():
-    session['room'] = "player-lobby"
-    return render_template("player-lobby.html", room=session['room'])
+    return render_template("player-lobby.html")
 
 
 @app.route('/auth/register', methods=["POST"])
@@ -67,6 +66,7 @@ def register_user():
 @socketio.on('joined', namespace='/chat')
 def joined():
     user = session['email']
+    join_room(user)
     connected_users.append(user)
     emit('status', {'msg': user + ' has entered the room.', 'user': user, 'userlist': connected_users}, broadcast=True)
 
@@ -82,6 +82,14 @@ def disconnected():
     user = session['email']
     connected_users.remove(user)
     emit('status', {'msg': user + ' has left the room.', 'user': user, 'userlist': connected_users}, broadcast=True)
+
+
+@socketio.on('challenge_player', namespace='/chat')
+def challenge_player(player):
+    user = session['email']
+    room = player['player']
+    emit('challenged', {'msg': user + ' has challenged you to 501, accept?', 'user': user}, room=room)
+
 
 @app.before_first_request
 def init_app():

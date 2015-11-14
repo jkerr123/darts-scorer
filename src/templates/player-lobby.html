@@ -2,17 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Player Lobby</title>
-     <script src="//code.jquery.com/jquery-1.4.2.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
-    <script src="/static/js/lobby.js"></script>
 
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+     <script src="/static/js/bootstrap.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+    <script src="/static/js/bootbox.min.js"></script>
+    <script src="/static/js/lobby.js"></script>
+    <title>Player Lobby</title>
 </head>
+
 <body>
 <textarea readonly id="chat" cols="80" rows="20"></textarea><br><br>
 <input id="text" size="80" placeholder="Enter your message here"><br><br>
 <select size="5" id="player-list">
 </select>
-<button id="challenge" onclick="message()">Challenge Player</button>
+<button id="challenge">Challenge Player</button>
 </body>
 </html>
