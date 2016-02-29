@@ -22,16 +22,42 @@
                     bootbox.confirm(data.msg, function(result) {
                      if(result == true)
                      {
-                        $('#chat').val($('#chat').val() + 'Game accepted!\n');
-                        $('#chat').scrollTop($('#chat')[0].scrollHeight);
+
+                        data = {player: data.player, newroom: data.newroom}
+                        $.ajax({
+                                type: "POST",
+                                url: "/player-challenged",
+                                data: JSON.stringify(data),
+                                processData: false,
+                                contentType: "application/json",
+                                success: function(obj)
+                                {
+                                    if (obj.error)
+                                        {
+                                            alert(obj.error)
+                                        }
+                                        else
+                                        {
+                                        socket.emit("matchaccepted", {'player': obj.player, 'room': obj.room})
+                                        }
+                                }
+                                });
                      }
                     });
                 });
 
+                 socket.on('beginmatch', function(data) {
+                     window.location.href = data.url;
+                });
+
                  $("#challenge").click(function(){
-                        var playertochallenge = $('#player-list').val();
-    socket.emit('challenge_player', {player: playertochallenge});
+                       var playertochallenge = $('#player-list').val();
+                    socket.emit('challenge_player', {player: playertochallenge});
                     });
+
+                     socket.on('matchaccepted', function(data) {
+                     socket.emit("matchsetup", {'player': data.player})
+                });
 
                 $('#text').keypress(function(e) {
                     var code = e.keyCode || e.which;
