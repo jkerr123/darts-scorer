@@ -1,0 +1,49 @@
+{% include 'top-menu.html' %}
+    <script src="/static/js/around-the-world.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+
+    <script src="/static/js/morris.js"></script>
+
+<body>
+
+ <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+              <div id="game-chart">
+                  <script>
+
+                      var dates = [];
+                      {% for game in games %}
+                      dates.push({date: "{{ game.date.strftime('%Y-%m-%d') }}", score:  "{{game.numberOfDarts}}" })
+                      {% endfor %}
+
+
+            Morris.Line({
+  element: 'game-chart',
+  data: dates,
+  							  parseTime: false,
+
+  xkey: 'date',
+  ykeys: ['score'],
+  xLabelAngle: 60,
+    labels: ['Score']
+});
+
+                  </script>
+
+              </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12"></div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

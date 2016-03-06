@@ -17,8 +17,8 @@ class User(object):
 
     @staticmethod
     def find_user(email):
-        if Database.find_one(COLLECTION, {"email": email}):
-            return True
+        return Database.find_one(COLLECTION, {"email": email})
+
 
     @staticmethod
     def check_login(email, password):
@@ -26,6 +26,6 @@ class User(object):
         user = User.find_user(email)
         if user is not None:
             password_encode = password.encode('utf-8')
-            if user.encrypted_password == sha256(password_encode).hexdigest():
+            if user['password'] == sha256(password_encode).hexdigest():
                 return True
         return False

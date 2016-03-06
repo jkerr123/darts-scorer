@@ -4,11 +4,13 @@ import os
 import uuid
 from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, send_file, \
     Response, current_app, flash
+from flask_login import LoginManager
 from flask_socketio import SocketIO, emit, join_room
 from flask_sslify import SSLify
 
 from src.models.database import Database
 from src.models.user import User
+from src.models.aroundtheworld import AroundTheWorld
 
 app = Flask(__name__)
 
@@ -18,6 +20,9 @@ MONGODB_URI = 'mongodb://heroku_plq17kjt:au06mdnk5ll4tq8dudvfccu89d@ds041934.mon
 app.secret_key = os.urandom(24)
 
 socketio = SocketIO(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 match = None
 
 connected_users = list()
@@ -60,8 +65,30 @@ def player_lobby():
 
 @app.route('/around-the-board')
 def around_the_board_page():
-
     return render_template("around-the-board.html")
+
+
+@app.route('/stats/around-the-board')
+def around_the_board_stats():
+    player = session['email']
+    games = AroundTheWorld.get_games(player)
+
+
+
+    return render_template("around-the-world-summary.html", games=games)
+
+
+@app.route("/update/around-the-board", methods=["POST"])
+def update_around_the_board():
+    data = request.get_json()
+    player = session['email']
+    numberOfDarts = data['numberOfDarts']
+    mode = data['mode']
+
+    if AroundTheWorld.add_game(player, numberOfDarts, mode):
+        return jsonify({"message": "Done"}), 200
+    else:
+        return jsonify({"error": "The data could not be saved"}), 201
 
 
 @app.route('/auth/register', methods=["POST"])
@@ -87,6 +114,12 @@ def login_user():
     else:
         flash("Your username or password was incorrect")
         return redirect(url_for('login_page'))
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home_page'))
 
 
 @socketio.on('joined', namespace='/chat')
