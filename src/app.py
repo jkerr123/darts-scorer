@@ -7,10 +7,13 @@ from flask import Flask, session, jsonify, request, render_template, redirect, u
 from flask_login import LoginManager
 from flask_socketio import SocketIO, emit, join_room
 from flask_sslify import SSLify
+from werkzeug.exceptions import abort
 
 from src.models.database import Database
 from src.models.user import User
 from src.models.aroundtheworld import AroundTheWorld
+from src.models.dartsat import DartsAt
+from src.models.bobs27 import Bobs27
 
 app = Flask(__name__)
 
@@ -37,6 +40,16 @@ def ssl_required(fn):
     return decorated_view
 
 
+def loggedin(function):
+    @wraps(function)
+    def wrapper():
+        if 'email' in session:
+            function()
+        else:
+            abort(401)
+    return wrapper
+
+
 def setup_database():
     Database.initialize(MONGODB_URI)
 
@@ -59,23 +72,77 @@ def login_page():
 
 
 @app.route('/player-lobby')
+@loggedin
 def player_lobby():
     return render_template("player-lobby.html")
 
 
+@app.route('/games')
+@loggedin
+def games_list():
+    return render_template("games.html")
+
+
 @app.route('/around-the-board')
+@loggedin
 def around_the_board_page():
     return render_template("around-the-board.html")
 
 
-@app.route('/stats/around-the-board')
+@app.route('/100-darts-at')
+@loggedin
+def darts_at_page():
+    return render_template("100-darts-at.html")
+
+
+@app.route('/bobs-27')
+@loggedin
+def bobs_27_page():
+    return render_template("bobs-27.html")
+
+
+@app.route('/profile')
+@loggedin
+def profile_page():
+    return render_template("profile.html", aroundTheBoard=around_the_board_stats(),
+                           dartsAt=darts_at_stats())
+
+
+def darts_at_stats():
+    player = session['email']
+    games = DartsAt.get_games(player)
+    return games
+
+
 def around_the_board_stats():
     player = session['email']
     games = AroundTheWorld.get_games(player)
+    return games
+
+@app.route("/update/100-darts-at", methods=["POST"])
+def update_darts_at():
+    data = request.get_json()
+    player = session['email']
+    dartsThrown = data['dartsThrown']
+    score = data['score']
+    points = data['points']
+    number = data['number']
+
+    if DartsAt.add_game(player, dartsThrown, score, points, number):
+        return jsonify({"message": "Done"}), 200
+    else:
+        return jsonify({"error": "The data could not be saved"}), 201
 
 
-
-    return render_template("around-the-world-summary.html", games=games)
+@app.route("/update/bobs-27", methods=["POST"])
+def update_bobs_27():
+    data = request.get_json()
+    player = session['email']
+    score = data['score']
+    if Bobs27.add_game(player, score):
+        return jsonify({"message": "Done"}), 200
+    else:
+        return jsonify({"error": "The data could not be saved"}), 201
 
 
 @app.route("/update/around-the-board", methods=["POST"])
