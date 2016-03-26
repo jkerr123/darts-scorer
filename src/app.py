@@ -46,7 +46,7 @@ def ssl_required(fn):
 def loggedin(function):
     @wraps(function)
     def wrapper():
-        if 'email' in session:
+        if 'name' in session:
             function()
         else:
             abort(401)
