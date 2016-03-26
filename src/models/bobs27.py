@@ -3,15 +3,15 @@ from database import Database
 
 __author__ = 'jamie'
 
-COLLECTION = "aroundtheworld"
+COLLECTION = "bobs27"
 
 
-class AroundTheWorld(object):
+class Bobs27(object):
 
     @staticmethod
-    def add_game(name, numberOfDarts, mode):
+    def add_game(name, score,):
 
-        if Database.insert(COLLECTION, {"username": name, "numberOfDarts": numberOfDarts, "mode": mode, "date": datetime.now()}):
+        if Database.insert(COLLECTION, {"username": name,  "score": score, "date": datetime.now()}):
             return True
         return False
 

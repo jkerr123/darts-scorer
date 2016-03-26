@@ -11,6 +11,9 @@
     <script src="/static/js/bootbox.min.js"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="\static\css\custom.css" rel="stylesheet" type="text/css">
+
+
+
   </head>
 <body>
 <div class="navbar navbar-default navbar-static-top">
@@ -22,16 +25,19 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><span>Darts Scorer</span></a>
+          <a class="navbar-brand" href="/"><span>Darts Trainer</span></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li class="">
-              <a href="#">Home</a>
+              <a href="/">Home</a>
             </li>
-              {% if session['email'] %}
+              {% if session['username'] %}
             <li class="">
-              <a href="#"><i class="fa fa-fw fa-user"></i>Profile</a>
+                <a href="/games"><i class="fa fa-fw fa-gamepad"></i>Games</a>
+            </li>
+              <li class="">
+              <a href="/profile"><i class="fa fa-fw fa-user"></i>Profile</a>
             </li>
             <li>
               <a href="/logout"><i class="fa fa-fw fa-sign-out"></i>Logout</a>
@@ -43,7 +49,7 @@
               <a href="/register"><i class="fa fa-fw fa-user"></i>Register</a>
             </li>
             <li>
-              <a data-toggle="modal" data-target="#login-modal"><i class="fa fa-fw fa-sign-out"></i>Login</a>
+              <a href="#login" data-toggle="modal" data-target="#login-modal"><i class="fa fa-fw fa-sign-out"></i>Login</a>
             </li>
 
 
@@ -67,7 +73,7 @@
 				<form id="login" action="auth/login" method="POST">
 					<div class="form-group">
 						<div class="input-group">
-							<input type="text" class="form-control" name="email" placeholder="Login">
+							<input type="text" class="form-control" name="username" placeholder="Login">
 							<label class="input-group-addon glyphicon glyphicon-user"></label>
 						</div>
 					</div> <!-- /.form-group -->
@@ -89,7 +95,6 @@
 
 			</div> <!-- /.modal-body -->
 		<div class="modal-footer">
-
 			</div> <!-- /.modal-footer -->
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

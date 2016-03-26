@@ -19,7 +19,9 @@ app = Flask(__name__)
 
 __author__ = 'jamie'
 
-MONGODB_URI = 'mongodb://heroku_plq17kjt:au06mdnk5ll4tq8dudvfccu89d@ds041934.mongolab.com:41934/heroku_plq17kjt'
+MONGODB_URI = "mongodb://heroku_d60xrrjk:381q53lbjknk0k877qgut866bc@ds013559.mlab.com:13559/heroku_d60xrrjk"
+
+
 app.secret_key = os.urandom(24)
 
 socketio = SocketIO(app)
@@ -57,7 +59,7 @@ def setup_database():
 @app.route('/')
 def home_page():
     if 'email' in session:
-        return render_template("index.html", message="You are logged in as " + session['email'])
+        return render_template("index.html", message="You are logged in as " + session['name'])
     return render_template("index.html")
 
 
@@ -109,20 +111,20 @@ def profile_page():
 
 
 def darts_at_stats():
-    player = session['email']
+    player = session['name']
     games = DartsAt.get_games(player)
     return games
 
 
 def around_the_board_stats():
-    player = session['email']
+    player = session['name']
     games = AroundTheWorld.get_games(player)
     return games
 
 @app.route("/update/100-darts-at", methods=["POST"])
 def update_darts_at():
     data = request.get_json()
-    player = session['email']
+    player = session['name']
     dartsThrown = data['dartsThrown']
     score = data['score']
     points = data['points']
@@ -137,7 +139,7 @@ def update_darts_at():
 @app.route("/update/bobs-27", methods=["POST"])
 def update_bobs_27():
     data = request.get_json()
-    player = session['email']
+    player = session['name']
     score = data['score']
     if Bobs27.add_game(player, score):
         return jsonify({"message": "Done"}), 200
@@ -148,7 +150,7 @@ def update_bobs_27():
 @app.route("/update/around-the-board", methods=["POST"])
 def update_around_the_board():
     data = request.get_json()
-    player = session['email']
+    player = session['name']
     numberOfDarts = data['numberOfDarts']
     mode = data['mode']
 
@@ -160,10 +162,11 @@ def update_around_the_board():
 
 @app.route('/auth/register', methods=["POST"])
 def register_user():
-    email = request.form['email']
+    name = request.form['username']
     password = sha256(request.form['password'].encode('utf-8')).hexdigest()
-    if User.register_user(email, password):
-        session['email'] = email
+    email = request.form['email']
+    if User.register_user(name, password, email):
+        session['name'] = name
         return redirect(url_for('home_page'))
     else:
         flash("This user already exists")
@@ -172,11 +175,11 @@ def register_user():
 
 @app.route('/auth/login', methods=["POST"])
 def login_user():
-    user_email = request.form['email']
+    user_name = request.form['username']
     user_password = request.form['password']
 
-    if User.check_login(user_email, user_password):
-        session['email'] = user_email
+    if User.check_login(user_name, user_password):
+        session['name'] = user_name
         return redirect(url_for('home_page'))
     else:
         flash("Your username or password was incorrect")
@@ -191,7 +194,7 @@ def logout():
 
 @socketio.on('joined', namespace='/chat')
 def joined():
-    user = session['email']
+    user = session['name']
     join_room(user)
     connected_users.append(user)
     emit('status', {'msg': user + ' has entered the room.', 'user': user, 'userlist': connected_users}, broadcast=True)
@@ -199,20 +202,20 @@ def joined():
 
 @socketio.on('message', namespace='/chat')
 def message_received(message):
-    user = session['email']
+    user = session['name']
     emit('message received', {'message': user + ': ' + message['msg']}, broadcast=True)
 
 
 @socketio.on('playerleft', namespace='/chat')
 def disconnected():
-    user = session['email']
+    user = session['name']
     connected_users.remove(user)
     emit('status', {'msg': user + ' has left the room.', 'user': user, 'userlist': connected_users}, broadcast=True)
 
 
 @socketio.on('challenge_player', namespace='/chat')
 def challenge_player(player):
-    user = session['email']
+    user = session['name']
     room = player['player']
     newroom = user + room
     join_room(newroom)
@@ -250,7 +253,7 @@ def match_accepted():
 @app.route('/match/<uuid:match_id>', methods=["GET", "POST"])
 def start_match(match_id):
     test= 12
-    myData = {'name': session['email'],
+    myData = {'name': session['name'],
               'score': 501,
               'dartaverage': 0,
               'doublepercentage': 0

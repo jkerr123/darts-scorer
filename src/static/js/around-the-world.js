@@ -67,8 +67,7 @@ function save_results()
             {
             if (obj.error)
                 alert(obj.error)
-            else
-                alert("ok");
+
             }
         });
 

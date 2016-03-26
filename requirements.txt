@@ -1,5 +1,6 @@
-Flask==0.10.1
+Flask
 Flask_SocketIO
+flask_login
 werkzeug
 pymongo
 beautifulsoup4

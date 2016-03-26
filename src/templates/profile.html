@@ -1,0 +1,139 @@
+{% include 'top-menu.html' %}
+    <script src="/static/js/around-the-world.js"></script>
+<script src="/static/js/chart.js"></script>
+
+
+
+
+<body>
+
+ <div class="section">
+      <div class="container">
+        <div class="row">
+
+
+<div class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="btn-block" data-toggle="collapse" href="#aroundtheboard">Around The Board</a>
+      </h4>
+    </div>
+    <div id="aroundtheboard" class="panel-collapse collapse">
+      <div class="panel-body"> <canvas id="around-the-board-chart" height="50"></canvas></div>
+
+    </div>
+  </div>
+</div>
+
+
+
+                  <script>
+                  var ctx = document.getElementById("around-the-board-chart").getContext("2d");
+
+                    Chart.defaults.global.responsive = true;
+                    Chart.defaults.global.scaleBeginAtZero = true;
+                    Chart.defaults.global.scaleStepWidth = 5;
+
+
+
+
+
+                      var aroundTheBoardDates = [];
+                      var aroundTheBoardScores = [];
+                      {% for game in aroundTheBoard %}
+
+                      aroundTheBoardDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      aroundTheBoardScores.push("{{game.numberOfDarts}}")
+                      {% endfor %}
+
+                        var data = {
+                        labels: aroundTheBoardDates,
+                         datasets:[{
+                         data: aroundTheBoardScores,
+                         label: "Score",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)"
+                        }]
+                        }
+
+
+                var options = {
+                legend: true,
+                      scaleLabel: "<%=value%>",
+
+                yAxisMinimumInterval : 5
+
+                }
+
+           var aroundTheBoardLine = new Chart(ctx).Line(data,options);
+                  </script>
+
+<div class="panel-group">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="btn-block" data-toggle="collapse" href="#dartsat">100 Darts At</a>
+      </h4>
+    </div>
+    <div id="dartsat" class="panel-collapse collapse">
+      <div class="panel-body"> <canvas id="darts-at-chart" height="50"></canvas></div>
+    </div>
+  </div>
+</div>
+
+            <script>
+                      var ctx = document.getElementById("darts-at-chart").getContext("2d");
+
+
+                      var dartsAtDates = [];
+                      var dartsAtScores = [];
+                      {% for game in dartsAt %}
+                      dartsAtDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      dartsAtScores.push("{{game.points}}")
+                      alert( {{ game.date.strftime('%Y-%m-%d')}})
+                      {% endfor %}
+
+                        var data = {
+                        labels: dartsAtDates,
+                         datasets:[{
+                         data: dartsAtScores,
+                         label: "Points",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)"
+                        }]
+                        }
+
+
+                var options = {
+                legend: true,
+                      scaleLabel: "<%=value%>",
+
+                yAxisMinimumInterval : 5
+
+                }
+
+           var dartsAtLine = new Chart(ctx).Line(data,options);
+                  </script>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12"></div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
