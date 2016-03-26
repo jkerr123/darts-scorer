@@ -47,7 +47,7 @@ def loggedin(function):
     @wraps(function)
     def wrapper():
         if 'name' in session:
-            function()
+            return make_response(function())
         else:
             abort(401)
     return wrapper
