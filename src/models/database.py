@@ -9,11 +9,9 @@ class Database(object):
     DATABASE = None
 
     @staticmethod
-    def initialize(user, password, url, port, database):
-        client = pymongo.MongoClient(host=url,
-                                     port=port)
-        Database.DATABASE = client[database]
-        Database.DATABASE.authenticate(user, password)
+    def initialize(uri):
+        client = pymongo.MongoClient(uri)
+        Database.DATABASE = client.get_default_database()
 
     @staticmethod
     def find(collection, query, sort=None, direction=pymongo.ASCENDING, limit=None):

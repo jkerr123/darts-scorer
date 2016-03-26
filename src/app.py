@@ -19,7 +19,8 @@ app = Flask(__name__)
 
 __author__ = 'jamie'
 
-MONGODB_URI = "mongodb://heroku_d60xrrjk:381q53lbjknk0k877qgut866bc@ds013559.mlab.com:13559/heroku_d60xrrjk"
+#MONGODB_URI = "mongodb://heroku_plq17kjt:au06mdnk5ll4tq8dudvfccu89d@ds041934.mongolab.com:41934/heroku_plq17kjt"
+MONGODB_URI = os.environ.get('MONGOLAB_URI')
 
 
 app.secret_key = os.urandom(24)
@@ -58,6 +59,7 @@ def setup_database():
 
 @app.route('/')
 def home_page():
+
     if 'email' in session:
         return render_template("index.html", message="You are logged in as " + session['name'])
     return render_template("index.html")
