@@ -18,7 +18,7 @@ app = Flask(__name__)
 FlaskUUID(app)
 __author__ = 'jamie'
 
-MONGODB_URI = os.environ.get('MONGOLAB_URI')
+MONGODB_URI = os.environ.get('MONGO_URL')
 
 
 app.secret_key = os.urandom(24)
