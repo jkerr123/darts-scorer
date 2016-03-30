@@ -26,3 +26,8 @@ class AroundTheWorld(object):
     def get_by_id(game_id):
         game = Database.find_one(COLLECTION, {"_id": UUIDLegacy(game_id)})
         return game
+
+    @staticmethod
+    def get_top_10():
+        top10 = Database.find(COLLECTION, {}, "numberOfDarts", 1, 10)
+        return top10

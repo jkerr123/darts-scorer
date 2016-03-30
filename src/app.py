@@ -227,6 +227,12 @@ def login_user():
         flash("Your username or password was incorrect")
         return redirect(url_for('login_page'))
 
+@app.route('/leaderboards')
+def leaderboards():
+    around_the_board_leader = AroundTheWorld.get_top_10()
+    return render_template('leaderboards.html', around_the_board=around_the_board_leader)
+
+
 
 @app.route('/logout')
 def logout():

@@ -49,16 +49,16 @@
 
               var data = [
             {
-                value: {{ game['numberOfDarts'] }},
+                value: {{ game['numberOfDarts'] }} - 21,
                 color:"#F7464A",
                 highlight: "#FF5A5E",
-                label: "Missed Darts"
+                label: "Darts Missed"
             },
             {
                 value: 21,
                 color: "#46BFBD",
                 highlight: "#5AD3D1",
-                label: "Hit Darts"
+                label: "Darts Hit"
             }]
 
 var myDoughnutChart = new Chart(pie).Doughnut(data);

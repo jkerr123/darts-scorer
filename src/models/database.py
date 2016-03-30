@@ -14,7 +14,7 @@ class Database(object):
         Database.DATABASE = client.get_default_database()
 
     @staticmethod
-    def find(collection, query, sort=None, direction=pymongo.ASCENDING, limit=None):
+    def find(collection, query, sort=None, direction=1, limit=None):
         if collection is not None:
             if sort:
                 cursor = Database.DATABASE[collection].find(query).sort(sort, direction)

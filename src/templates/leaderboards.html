@@ -1,0 +1,46 @@
+{% include 'top-menu.html' %}
+    <script src="/static/js/leaderboards.js"></script>
+
+
+<body>
+
+            <ul class="nav nav-tabs" id="leaderboards">
+			  <li class="active"><a href="#around-the-board" data-toggle="tab">Around The Board</a></li>
+			  <li><a href="#100-darts-at" data-toggle="tab">100 Darts At</a></li>
+			  <li><a href="#bobs-27" data-toggle="tab">Bob's 27</a></li>
+
+			</ul>
+
+			<div class="tab-content">
+			  <div class="tab-pane fade in  active" id="around-the-board">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Username</th>
+                            <th>Total Darts Thrown</th>
+                          </tr>
+                        </thead>
+                        {% for player in around_the_board %}
+                        <tr>
+                            <td> {{ player['username'] }}</td>
+                            <td>{{ player['numberOfDarts'] }}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    </div>
+                </div>
+
+
+
+			  <div class="tab-pane fade" id="100-darts-at">100 Darts At</div>
+
+
+			  <div class="tab-pane fade" id="bobs-27">Bob's 27</div>
+
+
+			</div>
+
+</body>
+</html>
