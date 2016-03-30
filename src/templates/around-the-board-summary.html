@@ -1,0 +1,73 @@
+{% include 'top-menu.html' %}
+<script src="/static/js/chart.js"></script>
+
+ <div class="section">
+      <div class="container">
+        <div class="row">
+
+    <canvas id="dartsAt" width="400" height="100"></canvas>
+    <canvas id="totalThrown" width="400" height="100"></canvas>
+
+
+
+            <script>
+             var bar = document.getElementById("dartsAt").getContext("2d");
+
+
+                    dartsThrownAt = {{ dartsThrownAt }}
+
+                    Chart.defaults.global.responsive = true;
+                    Chart.defaults.global.scaleBeginAtZero = true;
+                    Chart.defaults.global.scaleStepWidth = 5;
+
+                     var data = {
+                        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11','12', '13', '14', '15', '16',
+                           '17', '18', '19', '20', 'Bull'] ,
+                         datasets:[{
+                         data: {{ dartsThrownAt }},
+                         label: "Total Darts Thrown",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)"
+                        }]
+                        }
+
+                             var options = {
+                legend: true,
+                      scaleLabel: "<%=value%>",
+
+                yAxisMinimumInterval : 5
+
+                }
+
+                        var myBarChart = new Chart(bar).Bar(data, options);
+
+              var pie = document.getElementById("totalThrown").getContext("2d");
+
+              var data = [
+            {
+                value: {{ game['numberOfDarts'] }},
+                color:"#F7464A",
+                highlight: "#FF5A5E",
+                label: "Missed Darts"
+            },
+            {
+                value: 21,
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+                label: "Hit Darts"
+            }]
+
+var myDoughnutChart = new Chart(pie).Doughnut(data);
+
+
+    </script>
+        </div>
+      </div>
+ </div>
+
+</body>
+</html>

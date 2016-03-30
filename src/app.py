@@ -7,6 +7,7 @@ from flask import Flask, session, jsonify, request, render_template, redirect, u
 from flask_login import LoginManager
 from flask_socketio import SocketIO, emit, join_room
 from flask_sslify import SSLify
+from flask_uuid import FlaskUUID
 from werkzeug.exceptions import abort
 
 from src.models.database import Database
@@ -16,7 +17,7 @@ from src.models.dartsat import DartsAt
 from src.models.bobs27 import Bobs27
 
 app = Flask(__name__)
-
+FlaskUUID(app)
 __author__ = 'jamie'
 
 #MONGODB_URI = "mongodb://heroku_plq17kjt:au06mdnk5ll4tq8dudvfccu89d@ds041934.mongolab.com:41934/heroku_plq17kjt"
@@ -123,6 +124,44 @@ def around_the_board_stats():
     games = AroundTheWorld.get_games(player)
     return games
 
+
+@app.route('/around-the-board-summary', methods=['GET'])
+@loggedin
+def around_the_board_summary():
+    game_id = request.args.get('game_id')
+    game = AroundTheWorld.get_by_id(uuid.UUID(game_id))
+    dartsThrownAtDict = game['numberOfDartsAtEachNumber']
+    dartsThrownAt = []
+    dartsThrownAtLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11','12', '13', '14', '15', '16',
+                           '17', '18', '19', '20', 'Bull']
+
+    # can't loop through because keys are unordered strings. Auto ordering does not work.
+    dartsThrownAt.append(dartsThrownAtDict['1'])
+    dartsThrownAt.append(dartsThrownAtDict['2'])
+    dartsThrownAt.append(dartsThrownAtDict['3'])
+    dartsThrownAt.append(dartsThrownAtDict['4'])
+    dartsThrownAt.append(dartsThrownAtDict['5'])
+    dartsThrownAt.append(dartsThrownAtDict['6'])
+    dartsThrownAt.append(dartsThrownAtDict['7'])
+    dartsThrownAt.append(dartsThrownAtDict['8'])
+    dartsThrownAt.append(dartsThrownAtDict['9'])
+    dartsThrownAt.append(dartsThrownAtDict['10'])
+    dartsThrownAt.append(dartsThrownAtDict['11'])
+    dartsThrownAt.append(dartsThrownAtDict['12'])
+    dartsThrownAt.append(dartsThrownAtDict['13'])
+    dartsThrownAt.append(dartsThrownAtDict['14'])
+    dartsThrownAt.append(dartsThrownAtDict['15'])
+    dartsThrownAt.append(dartsThrownAtDict['16'])
+    dartsThrownAt.append(dartsThrownAtDict['17'])
+    dartsThrownAt.append(dartsThrownAtDict['18'])
+    dartsThrownAt.append(dartsThrownAtDict['19'])
+    dartsThrownAt.append(dartsThrownAtDict['20'])
+    dartsThrownAt.append(dartsThrownAtDict['Bull'])
+
+    return render_template("around-the-board-summary.html", game=game, dartsThrownAt=dartsThrownAt, dartsThrownAtLabels
+                           =dartsThrownAtLabels)
+
+
 @app.route("/update/100-darts-at", methods=["POST"])
 def update_darts_at():
     data = request.get_json()
@@ -151,13 +190,14 @@ def update_bobs_27():
 
 @app.route("/update/around-the-board", methods=["POST"])
 def update_around_the_board():
+    _id = uuid.uuid4()
     data = request.get_json()
     player = session['name']
     numberOfDarts = data['numberOfDarts']
-    mode = data['mode']
+    dartsAtEachNumber = data['dartsAtEachNumber']
 
-    if AroundTheWorld.add_game(player, numberOfDarts, mode):
-        return jsonify({"message": "Done"}), 200
+    if AroundTheWorld.add_game(_id, player, numberOfDarts, dartsAtEachNumber):
+        return jsonify({"message": "Game Saved!", "id": _id}), 200
     else:
         return jsonify({"error": "The data could not be saved"}), 201
 

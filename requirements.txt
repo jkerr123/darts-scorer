@@ -2,6 +2,7 @@ Flask
 Jinja2
 Flask_SocketIO
 flask_login
+Flask-UUID
 werkzeug
 pymongo
 beautifulsoup4

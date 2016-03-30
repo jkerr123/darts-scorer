@@ -1,5 +1,29 @@
 var dartsThrown = 0;
 var currentNumber = 1;
+var dartsAtNumber =
+{
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+    "11": 0,
+    "12": 0,
+    "13": 0,
+    "14": 0,
+    "15": 0,
+    "16": 0,
+    "17": 0,
+    "18": 0,
+    "19": 0,
+    "20": 0,
+    "Bull": 0
+};
 
 
 $( document ).ready(function(){
@@ -8,6 +32,7 @@ update();
 
 $('#hit').click(function() {
 
+    dartsAtNumber[currentNumber]++;
     if (currentNumber == 20)
     {
         currentNumber = "Bull";
@@ -31,6 +56,8 @@ $('#hit').click(function() {
 
 $('#miss').click(function() {
 
+    dartsAtNumber[currentNumber]++;
+
     dartsThrown++;
     update();
 
@@ -50,12 +77,11 @@ function update()
 
 function finishGame()
 {
-            bootbox.alert("You have finished the game in " + dartsThrown + " darts!", save_results());
-}
+            bootbox.alert("You have finished the game in " + dartsThrown + " darts!",function(){
 
-function save_results()
-{
-    data = {numberOfDarts: dartsThrown, mode: "N/A"}
+
+
+    data = {numberOfDarts: dartsThrown, dartsAtEachNumber: dartsAtNumber}
 
        $.ajax({
         type: "POST",
@@ -65,10 +91,13 @@ function save_results()
             contentType: "application/json",
             success: function(obj)
             {
+
             if (obj.error)
                 alert(obj.error)
-
+                else
+                window.location.href = 'around-the-board-summary?game_id=' + obj.id;
             }
         });
 
+});
 }
