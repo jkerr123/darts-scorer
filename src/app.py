@@ -2,11 +2,9 @@ from functools import wraps
 from hashlib import sha256
 import os
 import uuid
-from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, send_file, \
-    Response, current_app, flash
+from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, flash
 from flask_login import LoginManager
 from flask_socketio import SocketIO, emit, join_room
-from flask_sslify import SSLify
 from flask_uuid import FlaskUUID
 from werkzeug.exceptions import abort
 
@@ -20,7 +18,6 @@ app = Flask(__name__)
 FlaskUUID(app)
 __author__ = 'jamie'
 
-#MONGODB_URI = "mongodb://heroku_plq17kjt:au06mdnk5ll4tq8dudvfccu89d@ds041934.mongolab.com:41934/heroku_plq17kjt"
 MONGODB_URI = os.environ.get('MONGOLAB_URI')
 
 
@@ -125,6 +122,21 @@ def around_the_board_stats():
     return games
 
 
+@app.route('/bobs-27-summary', methods=['GET'])
+@loggedin
+def bobs_27_summary():
+    game_id = request.args.get('game_id')
+    game = Bobs27.get_by_id(uuid.UUID(game_id))
+    return render_template('bobs-27-summary.html', game=game)
+
+@app.route('/darts-at-summary', methods=['GET'])
+@loggedin
+def darts_at_summary():
+    game_id = request.args.get('game_id')
+    game = DartsAt.get_by_id(uuid.UUID(game_id))
+    return render_template('bobs-27-summary.html', game=game)
+
+
 @app.route('/around-the-board-summary', methods=['GET'])
 @loggedin
 def around_the_board_summary():
@@ -164,6 +176,7 @@ def around_the_board_summary():
 
 @app.route("/update/100-darts-at", methods=["POST"])
 def update_darts_at():
+    _id = uuid.uuid4()
     data = request.get_json()
     player = session['name']
     dartsThrown = data['dartsThrown']
@@ -171,7 +184,7 @@ def update_darts_at():
     points = data['points']
     number = data['number']
 
-    if DartsAt.add_game(player, dartsThrown, score, points, number):
+    if DartsAt.add_game(_id, player, dartsThrown, score, points, number):
         return jsonify({"message": "Done"}), 200
     else:
         return jsonify({"error": "The data could not be saved"}), 201
@@ -179,10 +192,11 @@ def update_darts_at():
 
 @app.route("/update/bobs-27", methods=["POST"])
 def update_bobs_27():
+    _id = uuid.uuid4()
     data = request.get_json()
     player = session['name']
     score = data['score']
-    if Bobs27.add_game(player, score):
+    if Bobs27.add_game(_id, player, score):
         return jsonify({"message": "Done"}), 200
     else:
         return jsonify({"error": "The data could not be saved"}), 201
@@ -229,8 +243,11 @@ def login_user():
 
 @app.route('/leaderboards')
 def leaderboards():
-    around_the_board_leader = AroundTheWorld.get_top_10()
-    return render_template('leaderboards.html', around_the_board=around_the_board_leader)
+    around_the_board_leader = AroundTheWorld.get_leaderboard(10)
+    darts_at_leader = DartsAt.get_leaderboard(10)
+    bobs_27_leader = Bobs27.get_leaderboard(10)
+    return render_template('leaderboards.html', around_the_board=around_the_board_leader,
+                           darts_at=darts_at_leader, bobs27=bobs_27_leader)
 
 
 

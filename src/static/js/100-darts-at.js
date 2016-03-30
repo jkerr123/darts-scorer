@@ -7,6 +7,14 @@ $( document ).ready(function(){
 
 update();
 
+$('#miss').click(function() {
+
+dartsThrown++;
+update();
+
+});
+
+
 $('#single').click(function() {
 
 dartsThrown++;

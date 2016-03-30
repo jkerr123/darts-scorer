@@ -1,5 +1,6 @@
 from datetime import datetime
-from bson import UUIDLegacy
+from bson.binary import UUIDLegacy
+
 from database import Database
 
 __author__ = 'jamie'
@@ -28,6 +29,10 @@ class AroundTheWorld(object):
         return game
 
     @staticmethod
-    def get_top_10():
-        top10 = Database.find(COLLECTION, {}, "numberOfDarts", 1, 10)
-        return top10
+    def get_leaderboard(numResults = None):
+        if numResults:
+            results = Database.find(COLLECTION, {}, "numberOfDarts", 1, numResults)
+        else:
+            results = Database.find(COLLECTION, {}, "numberOfDarts", 1)
+
+        return results
