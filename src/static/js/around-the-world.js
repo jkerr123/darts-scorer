@@ -41,6 +41,7 @@ $('#hit').click(function() {
     }
     else if (currentNumber == "Bull")
     {
+        dartsThrown++;
         finishGame();
     }
     else
