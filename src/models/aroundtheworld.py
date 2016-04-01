@@ -11,10 +11,10 @@ COLLECTION = "aroundtheworld"
 class AroundTheWorld(object):
 
     @staticmethod
-    def add_game(_id, name, numberOfDarts, numberOfDartsAtEachNumber):
+    def add_game(_id, name, numberOfDarts, numberOfDartsAtEachNumber, mode):
 
         if Database.insert(COLLECTION, {"_id": _id, "username": name, "numberOfDarts": numberOfDarts, "numberOfDartsAtEachNumber":
-                                        numberOfDartsAtEachNumber, "date": datetime.now()}):
+                                        numberOfDartsAtEachNumber, "mode": mode, "date": datetime.now()}):
             return True
         return False
 

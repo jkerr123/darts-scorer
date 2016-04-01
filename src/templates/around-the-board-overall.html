@@ -1,0 +1,95 @@
+{% include 'top-menu.html' %}
+<script src="/static/js/Chart.js"></script>
+<script src="/static/js/list.js"></script>
+
+<body>
+
+             <h1 class="text-center">Around The Board Overall</h1>
+<div class="container-fluid">
+             <h2 class="text-center">Darts Taken</h2>
+
+       <canvas id="around-the-board-chart" height="50"></canvas>
+</div>
+
+             <div class="container-fluid">
+             <h2 class="text-center">Game List</h2>
+
+<div id="games">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th class="sort" data-sort="date" style="cursor: pointer">Date</th>
+        <th class="sort" data-sort="dartsThrown" style="cursor: pointer">Darts Thrown</th>
+      </tr>
+                        </thead>
+                        <tbody class="list">
+            {% for game in aroundTheBoard %}
+                              <tr onclick="window.location.href = '../around-the-board-summary?game_id={{ game['_id'] }}';"
+                                style="cursor: pointer">
+    <td class="date">{{ game.date.strftime('%Y-%m-%d') }}</td>
+    <td class="dartsThrown">{{ game.numberOfDarts }}</td>
+          </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+                    </div>
+</div>
+</div>
+</body>
+
+ <script>
+
+
+
+                  var ctx = document.getElementById("around-the-board-chart").getContext("2d");
+
+                    Chart.defaults.global.responsive = true;
+                    Chart.defaults.global.scaleBeginAtZero = true;
+                    Chart.defaults.global.scaleStepWidth = 5;
+
+
+
+
+
+                      var aroundTheBoardDates = [];
+                      var aroundTheBoardScores = [];
+                      {% for game in aroundTheBoard %}
+
+                      aroundTheBoardDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      aroundTheBoardScores.push("{{game.numberOfDarts}}")
+                      {% endfor %}
+
+                        var data = {
+                        labels: aroundTheBoardDates,
+                         datasets:[{
+                         data: aroundTheBoardScores,
+                         label: "Score",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)"
+                        }]
+                        }
+
+
+                var options = {
+                legend: true,
+                      scaleLabel: "<%=value%>",
+
+                yAxisMinimumInterval : 5
+
+                }
+
+           var aroundTheBoardLine = new Chart(ctx).Line(data,options);
+
+                             var settings = {
+                    valueNames: [ 'date', 'dartsThrown' ]
+                                };
+
+var games = new List('games', settings);
+                  </script>
+
+</html>

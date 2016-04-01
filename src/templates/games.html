@@ -4,12 +4,37 @@
 
 
 <body>
-<ul>
+<div><ul>
 <li>
-<a href="/around-the-board">Around The Board</a>
+<a href="#around-the-board" data-toggle="modal" data-target="#around-the-board-modal">Around The Board</a>
 </li>
     <li><a href="/100-darts-at">100 Darts At</a></li>
     <li><a href="/bobs-27">Bob's 27</a></li>
     </ul>
+</div>
+
+ <div class="modal fade" id="around-the-board-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+				<h4 class="modal-title" id="myModalLabel">Select A Game Type</h4>
+			</div> <!-- /.modal-header -->
+
+			<div class="modal-body">
+
+                <a href="/around-the-board?mode=Any" class="btn btn-block btn-lg btn-primary">Any</a><p></p>
+                <a href="/around-the-board?mode=Single" class="btn btn-block btn-lg btn-primary">Single</a><p></p>
+                <a href="/around-the-board?mode=Double" class="btn btn-block btn-lg btn-primary">Double</a><p></p>
+                <a href="/around-the-board?mode=Treble" class="btn btn-block btn-lg btn-primary">Treble</a>
+
+
+			</div> <!-- /.modal-body -->
+		<div class="modal-footer">
+			</div> <!-- /.modal-footer -->
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </body>
 </html>

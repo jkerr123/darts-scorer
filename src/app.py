@@ -85,10 +85,11 @@ def games_list():
     return render_template("games.html")
 
 
-@app.route('/around-the-board')
+@app.route('/around-the-board', methods=['GET'])
 @loggedin
 def around_the_board_page():
-    return render_template("around-the-board.html")
+    mode = request.args.get('mode')
+    return render_template("around-the-board.html", mode=mode)
 
 
 @app.route('/100-darts-at')
@@ -106,20 +107,25 @@ def bobs_27_page():
 @app.route('/profile')
 @loggedin
 def profile_page():
-    return render_template("profile.html", aroundTheBoard=around_the_board_stats(),
-                           dartsAt=darts_at_stats())
+    return render_template("profile.html")
 
 
+@app.route('/stats/100-darts-at')
 def darts_at_stats():
     player = session['name']
     games = DartsAt.get_games(player)
-    return games
+    return render_template("darts-at-overall.html", dartsAt=games)
 
 
+@app.route('/stats/around-the-board')
+@loggedin
 def around_the_board_stats():
     player = session['name']
     games = AroundTheWorld.get_games(player)
-    return games
+    return render_template("around-the-board-overall.html", aroundTheBoard=games)
+
+
+
 
 
 @app.route('/bobs-27-summary', methods=['GET'])
@@ -207,10 +213,11 @@ def update_around_the_board():
     _id = uuid.uuid4()
     data = request.get_json()
     player = session['name']
+    mode = data['mode']
     numberOfDarts = data['numberOfDarts']
     dartsAtEachNumber = data['dartsAtEachNumber']
 
-    if AroundTheWorld.add_game(_id, player, numberOfDarts, dartsAtEachNumber):
+    if AroundTheWorld.add_game(_id, player, numberOfDarts, dartsAtEachNumber, mode):
         return jsonify({"message": "Game Saved!", "id": _id}), 200
     else:
         return jsonify({"error": "The data could not be saved"}), 201

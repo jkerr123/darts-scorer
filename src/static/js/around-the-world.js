@@ -1,3 +1,5 @@
+var gameMode = document.getElementById("script").getAttribute("data-mode");
+
 var dartsThrown = 0;
 var currentNumber = 1;
 var dartsAtNumber =
@@ -82,7 +84,7 @@ function finishGame()
 
 
 
-    data = {numberOfDarts: dartsThrown, dartsAtEachNumber: dartsAtNumber}
+    data = {numberOfDarts: dartsThrown, dartsAtEachNumber: dartsAtNumber, mode: gameMode}
 
        $.ajax({
         type: "POST",

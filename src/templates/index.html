@@ -6,12 +6,16 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 text-center">
+                          {% if session['name'] %}
+                        <h1 class="text-inverse">Welcome {{ session['name'] }}</h1>
+                        {% else %}
                         <h1 class="text-inverse">Darts Trainer</h1>
                         <p class="text-inverse">The Ultimate Darts Training Tool</p>
                         <br>
                         <br>
                         <a class="btn btn-home btn-lg btn-primary" href="/register">Register</a>
                         <a class="btn btn-home btn-lg btn-primary" data-toggle="modal" data-target="#login-modal">Login</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

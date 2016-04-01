@@ -1,0 +1,54 @@
+{% include 'top-menu.html' %}
+<script src="/static/js/Chart.js"></script>
+
+<body>
+
+<h1 class="text-center">100 Darts At</h1>
+
+             <h2 class="text-center">Score Total</h2>
+
+       <canvas id="darts-at-chart" height="50"></canvas>
+
+<script>
+                      var ctx = document.getElementById("darts-at-chart").getContext("2d");
+
+                      Chart.defaults.global.responsive = true;
+                    Chart.defaults.global.scaleBeginAtZero = true;
+                    Chart.defaults.global.scaleStepWidth = 5;
+
+
+                      var dartsAtDates = [];
+                      var dartsAtScores = [];
+                      {% for game in dartsAt %}
+                      dartsAtDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      dartsAtScores.push("{{game.points}}")
+                      {% endfor %}
+
+                        var data = {
+                        labels: dartsAtDates,
+                         datasets:[{
+                         data: dartsAtScores,
+                         label: "Points",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)"
+                        }]
+                        }
+
+
+                var options = {
+                legend: true,
+                      scaleLabel: "<%=value%>",
+
+                yAxisMinimumInterval : 5
+
+                }
+
+           var dartsAtLine = new Chart(ctx).Line(data,options);
+                  </script>
+
+</body>
+</html>
