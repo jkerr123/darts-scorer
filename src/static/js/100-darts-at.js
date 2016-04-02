@@ -1,4 +1,10 @@
-var numberToHit = 20
+var gameMode = document.getElementById("script").getAttribute("data-mode");
+
+if (gameMode == "Bull")
+    var numberToHit = 50;
+else
+    var numberToHit = gameMode;
+
 var dartsThrown = 0;
 var score = 0;
 var points = 0;

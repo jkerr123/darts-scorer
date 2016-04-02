@@ -10,9 +10,9 @@ COLLECTION = "dartsAt"
 class DartsAt(object):
 
     @staticmethod
-    def add_game(_id, name, numberOfDarts, score, points, number):
+    def add_game(_id, name, numberOfDarts, score, points, number, mode):
 
-        if Database.insert(COLLECTION, {"_id": _id, "username": name, "numberOfDarts": numberOfDarts, "score": score,
+        if Database.insert(COLLECTION, {"_id": _id, "mode": mode, "username": name, "numberOfDarts": numberOfDarts, "score": score,
                                         "points": points, "number": number, "date": datetime.now()}):
             return True
         return False

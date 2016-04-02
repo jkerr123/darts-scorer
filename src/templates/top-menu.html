@@ -9,6 +9,8 @@
 
 
     <script src="/static/js/bootbox.min.js"></script>
+    <script src="/static/js/login.js"></script>
+
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="\static\css\custom.css" rel="stylesheet" type="text/css">
 
@@ -74,7 +76,10 @@
 			</div> <!-- /.modal-header -->
 
 			<div class="modal-body">
-				<form id="login" action="auth/login" method="POST">
+                <div role="alert" id="message"></div>
+
+
+				<form id="login">
 					<div class="form-group">
 						<div class="input-group">
 							<input type="text" class="form-control" name="username" placeholder="Login">
@@ -93,7 +98,7 @@
 						<label>
 							<input type="checkbox"> Remember me
 						</label>
-                        <button type="submit" class="form-control btn btn-primary">Sign In</button>
+                        <button type="button" onclick="login()" id="submit" class="form-control btn btn-primary">Sign In</button>
 					</div> <!-- /.checkbox -->
 				</form>
 

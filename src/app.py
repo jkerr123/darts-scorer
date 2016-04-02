@@ -89,13 +89,19 @@ def games_list():
 @loggedin
 def around_the_board_page():
     mode = request.args.get('mode')
-    return render_template("around-the-board.html", mode=mode)
+
+    if mode in ("Any", "Single", "Double", "Treble"):
+        return render_template("around-the-board.html", mode=mode)
+    else:
+        abort(403)
 
 
-@app.route('/100-darts-at')
+@app.route('/100-darts-at', methods=['GET'])
 @loggedin
 def darts_at_page():
-    return render_template("100-darts-at.html")
+    mode = request.args.get('mode')
+    if mode in ("20", "19", "18", "17", "16", "15", "Bull"):
+        return render_template("100-darts-at.html", mode=mode)
 
 
 @app.route('/bobs-27')
@@ -184,13 +190,14 @@ def around_the_board_summary():
 def update_darts_at():
     _id = uuid.uuid4()
     data = request.get_json()
+    mode = data['mode']
     player = session['name']
     dartsThrown = data['dartsThrown']
     score = data['score']
     points = data['points']
     number = data['number']
 
-    if DartsAt.add_game(_id, player, dartsThrown, score, points, number):
+    if DartsAt.add_game(_id, player, dartsThrown, score, points, number, mode):
         return jsonify({"message": "Done"}), 200
     else:
         return jsonify({"error": "The data could not be saved"}), 201
@@ -243,10 +250,10 @@ def login_user():
 
     if User.check_login(user_name, user_password):
         session['name'] = user_name
-        return redirect(url_for('home_page'))
+        return jsonify({"message": "Logged In!"}), 200
     else:
-        flash("Your username or password was incorrect")
-        return redirect(url_for('login_page'))
+        return jsonify({"error": "Invalid Username Or Password"}), 201
+
 
 @app.route('/leaderboards')
 def leaderboards():
