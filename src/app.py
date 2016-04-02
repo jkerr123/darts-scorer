@@ -102,6 +102,8 @@ def darts_at_page():
     mode = request.args.get('mode')
     if mode in ("20", "19", "18", "17", "16", "15", "Bull"):
         return render_template("100-darts-at.html", mode=mode)
+    else:
+        abort(403)
 
 
 @app.route('/bobs-27')

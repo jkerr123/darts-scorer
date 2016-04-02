@@ -1,7 +1,7 @@
 var gameMode = document.getElementById("script").getAttribute("data-mode");
 
 if (gameMode == "Bull")
-    var numberToHit = 50;
+    var numberToHit = 25;
 else
     var numberToHit = gameMode;
 
@@ -10,6 +10,14 @@ var score = 0;
 var points = 0;
 
 $( document ).ready(function(){
+
+if (gameMode == "Bull")
+{
+                   $("#single").text("Outer Bull");
+                   $("#double").text("Inner Bull");
+                   $("#treble").hide();
+
+}
 
 update();
 
