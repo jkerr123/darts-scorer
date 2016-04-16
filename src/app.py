@@ -3,10 +3,12 @@ from hashlib import sha256
 import os
 import uuid
 from flask import Flask, session, jsonify, request, render_template, redirect, url_for, make_response, flash
+from flask_cors import CORS, cross_origin
 from flask_login import LoginManager
 from flask_socketio import SocketIO, emit, join_room
 from flask_uuid import FlaskUUID
 from werkzeug.exceptions import abort
+
 
 from src.models.database import Database
 from src.models.user import User
@@ -26,6 +28,8 @@ app.secret_key = os.urandom(24)
 socketio = SocketIO(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+CORS(app)
 
 match = None
 
@@ -246,6 +250,7 @@ def register_user():
 
 
 @app.route('/auth/login', methods=["POST"])
+@cross_origin()
 def login_user():
     user_name = request.form['username']
     user_password = request.form['password']
