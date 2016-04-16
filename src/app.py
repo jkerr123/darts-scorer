@@ -29,7 +29,9 @@ socketio = SocketIO(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-CORS(app)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 match = None
 
