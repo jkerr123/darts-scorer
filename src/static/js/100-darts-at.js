@@ -3,7 +3,7 @@ var gameMode = document.getElementById("script").getAttribute("data-mode");
 if (gameMode == "Bull")
     var numberToHit = 25;
 else
-    var numberToHit = gameMode;
+    var numberToHit = parseInt(gameMode);
 
 var dartsThrown = 0;
 var score = 0;

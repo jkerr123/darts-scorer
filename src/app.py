@@ -12,7 +12,7 @@ from werkzeug.exceptions import abort
 
 from src.models.database import Database
 from src.models.user import User
-from src.models.aroundtheworld import AroundTheWorld
+from src.models.aroundtheboard import AroundTheWorld
 from src.models.dartsat import DartsAt
 from src.models.bobs27 import Bobs27
 
@@ -259,7 +259,7 @@ def login_user():
 
     if User.check_login(user_name, user_password):
         session['name'] = user_name
-        return jsonify({"message": "Logged In!"}), 200
+        return jsonify({"message": "Logged In!", "username": session['name']}), 200
     else:
         return jsonify({"error": "Invalid Username Or Password"}), 201
 
@@ -366,4 +366,4 @@ def init_app():
 
 
 if __name__ == "__main__":
-    socketio.run(app, host='0.0.0.0')
+    socketio.run(app, host='0.0.0.0', debug=True)
