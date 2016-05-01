@@ -100,7 +100,7 @@ function save_results()
                 else
                 window.location.href = 'darts-at-summary?game_id=' + obj.id;
             }
-            }
+
         });
 
 
