@@ -1,19 +1,57 @@
 {% include 'top-menu.html' %}
 <script src="/static/js/Chart.js"></script>
 <script src="/static/js/list.js"></script>
+<script>
+
+                      var aroundTheBoardDates = [];
+                      var aroundTheBoardScores = [];
+
+                      var anyAroundTheBoardDates = [];
+                      var anyAroundTheBoardScores = [];
+
+                       var singleAroundTheBoardDates = [];
+                      var singleAroundTheBoardScores = [];
+
+                       var doubleAroundTheBoardDates = [];
+                      var doubleAroundTheBoardScores = [];
+
+                       var trebleAroundTheBoardDates = [];
+                      var trebleAroundTheBoardScores = [];
+
+
+</script>
 
 <body>
 
              <h1 class="text-center">Around The Board Overall</h1>
 <div class="container-fluid">
              <h2 class="text-center">Darts Taken</h2>
+Filter by: <select id="gameTypeLine">
 
+  <option value="All">All</option>
+  <option value="Any">Any Segment</option>
+  <option value="Single">Single</option>
+  <option value="Double">Double</option>
+  <option value="Treble">Treble</option>
+
+</select>
+
+        <div id = "linechart">
        <canvas id="around-the-board-chart" height="50"></canvas>
+            </div>
 </div>
 
              <div class="container-fluid">
              <h2 class="text-center">Game List</h2>
+<select id="gameTypeTable">
 
+  <option value="All">All</option>
+  <option value="Any">Any Segment</option>
+  <option value="Single">Single</option>
+  <option value="Double">Double</option>
+  <option value="Treble">Treble</option>
+
+</select>
 <div id="games">
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -21,14 +59,47 @@
       <tr>
         <th class="sort" data-sort="date" style="cursor: pointer">Date</th>
         <th class="sort" data-sort="dartsThrown" style="cursor: pointer">Darts Thrown</th>
+                  <th class="sort" data-sort="mode" style="cursor: pointer">Mode</th>
+
       </tr>
                         </thead>
                         <tbody class="list">
             {% for game in aroundTheBoard %}
+            <script>
+                                      aroundTheBoardDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      aroundTheBoardScores.push("{{game.numberOfDarts}}")
+                mode = "{{game.mode}}"
+           if (mode == 'Any')
+           {
+                      anyAroundTheBoardDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      anyAroundTheBoardScores.push("{{game.numberOfDarts}}")
+           }
+           else if(mode == 'Single')
+           {
+           singleAroundTheBoardDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      singleAroundTheBoardScores.push("{{game.numberOfDarts}}")
+            }
+                       else if(mode == 'Double')
+           {
+           doubleAroundTheBoardDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      doubleAroundTheBoardScores.push("{{game.numberOfDarts}}")
+            }
+                                   else if(mode == 'Treble')
+           {
+           trebleAroundTheBoardDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      trebleAroundTheBoardScores.push("{{game.numberOfDarts}}")
+            }
+
+
+
+
+            </script>
+
                               <tr onclick="window.location.href = '../around-the-board-summary?game_id={{ game['_id'] }}';"
                                 style="cursor: pointer">
     <td class="date">{{ game.date.strftime('%Y-%m-%d') }}</td>
     <td class="dartsThrown">{{ game.numberOfDarts }}</td>
+    <td class="mode">{{ game.mode }}</td>
           </tr>
     {% endfor %}
     </tbody>
@@ -36,7 +107,6 @@
                     </div>
 </div>
 </div>
-</body>
 
  <script>
 
@@ -50,15 +120,6 @@
 
 
 
-
-
-                      var aroundTheBoardDates = [];
-                      var aroundTheBoardScores = [];
-                      {% for game in aroundTheBoard %}
-
-                      aroundTheBoardDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
-                      aroundTheBoardScores.push("{{game.numberOfDarts}}")
-                      {% endfor %}
 
                         var data = {
                         labels: aroundTheBoardDates,
@@ -76,20 +137,108 @@
 
 
                 var options = {
-                legend: true,
+                legend: {
+                    position: 'bottom',
+                },
                       scaleLabel: "<%=value%>",
+
+                      scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        },
 
                 yAxisMinimumInterval : 5
 
                 }
 
-           var aroundTheBoardLine = new Chart(ctx).Line(data,options);
+           var aroundTheBoardLine = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: options
+});
 
                              var settings = {
-                    valueNames: [ 'date', 'dartsThrown' ]
+                    valueNames: [ 'date', 'dartsThrown', 'mode' ]
                                 };
 
 var games = new List('games', settings);
+
+ $("#gameTypeLine").change(function (evt) {
+
+          var lineChartCanvas = document.getElementById("linechart");
+           lineChartCanvas.innerHTML = "";
+           $('#linechart').append('<canvas id="around-the-board-chart" height="50"></canvas>');
+
+
+       var newLabels;
+       var newData;
+    var gameSelection = $("#gameTypeLine").val();
+    data.datasets.splice(0, 0);
+          if (gameSelection == "Any")
+          {
+            newLabels = anyAroundTheBoardDates
+            newData = anyAroundTheBoardScores
+          }
+          else if(gameSelection == "Single")
+          {
+            newLabels = singleAroundTheBoardDates
+            newData = singleAroundTheBoardScores
+          }
+          else if(gameSelection == "Double")
+          {
+            newLabels = doubleAroundTheBoardDates
+            newData = doubleAroundTheBoardScores
+          }
+          else if(gameSelection == "Treble")
+          {
+            newLabels = trebleAroundTheBoardDates
+            newData = trebleAroundTheBoardScores
+          }
+          else if(gameSelection == "All")
+          {
+            newLabels = aroundTheBoardDates
+            newData = aroundTheBoardScores
+          }
+
+
+
+                 var theNewData = {
+                        labels: newLabels,
+                         datasets:[{
+                         data: newData,
+                         label: "Score",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)"
+                        }]
+                        }
+                  var ctx = $("#around-the-board-chart").get(0).getContext("2d");
+
+    var aroundTheBoardLine = new Chart(ctx, {
+    type: 'line',
+    data: theNewData,
+    options: options
+});
+});
+
+$('#gameTypeTable').change(function () {
+    var selection = this.value;
+    if (selection != 'All') {
+        games.filter(function(list) {
+            if (list.values().mode == selection)
+            return true;
+        });
+    } else {
+        games.filter();
+    }
+});
                   </script>
+</body>
 
 </html>

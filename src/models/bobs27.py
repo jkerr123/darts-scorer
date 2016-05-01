@@ -10,10 +10,11 @@ COLLECTION = "bobs27"
 class Bobs27(object):
 
     @staticmethod
-    def add_game(_id, name, score,):
+    def add_game(_id, name, score, hitsOnEachNumber):
 
         if Database.insert(COLLECTION, {"_id": _id, "username": name,
-                                        "score": score, "date": datetime.now()}):
+                                        "score": score, "date": datetime.now(),
+                                        "hitsOnEachNumber": hitsOnEachNumber}):
             return True
         return False
 
@@ -30,8 +31,8 @@ class Bobs27(object):
     @staticmethod
     def get_leaderboard(numResults = None):
         if numResults:
-            results = Database.find(COLLECTION, {}, "score", 1, numResults)
+            results = Database.find(COLLECTION, {}, "score", -1, numResults)
         else:
-            results = Database.find(COLLECTION, {}, "score", 1)
+            results = Database.find(COLLECTION, {}, "score", -1)
 
         return results

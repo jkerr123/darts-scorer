@@ -9,6 +9,11 @@ var dartsThrown = 0;
 var score = 0;
 var points = 0;
 
+var miss = 0;
+var single = 0;
+var double = 0;
+var treble = 0;
+
 $( document ).ready(function(){
 
 if (gameMode == "Bull")
@@ -24,6 +29,7 @@ update();
 $('#miss').click(function() {
 
 dartsThrown++;
+miss++;
 update();
 
 });
@@ -32,6 +38,7 @@ update();
 $('#single').click(function() {
 
 dartsThrown++;
+single++;
 score = score + numberToHit;
 points = points + 1
 update();
@@ -40,6 +47,7 @@ update();
 
 $('#double').click(function() {
     dartsThrown++;
+    double++;
 score = score + (numberToHit * 2);
 points = points + 2
 update();
@@ -47,6 +55,7 @@ update();
 
 $('#treble').click(function() {
     dartsThrown++;
+    treble++;
 score = score + (numberToHit * 3);
 points = points + 3
 update();
@@ -75,7 +84,7 @@ function finishGame()
 
 function save_results()
 {
-    data = {"points": points, "score": score, "dartsThrown": dartsThrown, "number": numberToHit}
+    data = {"points": points, "score": score, "dartsThrown": dartsThrown, "number": numberToHit, "miss": miss, "single": single, "double": double, "treble": treble}
 
     $.ajax({
         type: "POST",
@@ -86,7 +95,11 @@ function save_results()
             success: function(obj)
             {
             if (obj.error)
+
                 alert(obj.error)
+                else
+                window.location.href = 'darts-at-summary?game_id=' + obj.id;
+            }
             }
         });
 

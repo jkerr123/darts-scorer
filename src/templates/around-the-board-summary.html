@@ -1,6 +1,6 @@
 {% include 'top-menu.html' %}
 <script src="/static/js/Chart.js"></script>
-
+<body>
  <div class="section">
       <div class="container">
         <div class="row">
@@ -44,38 +44,69 @@
                         }
 
                              var options = {
-                legend: true,
+                 legend: {
+                    position: 'bottom',
+                },
                       scaleLabel: "<%=value%>",
+
+
+                      scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        },
+
 
                 yAxisMinimumInterval : 5
 
                 }
 
-                        var myBarChart = new Chart(bar).Bar(data, options);
-
+var myBarChart = new Chart(bar, {
+    type: 'bar',
+    data: data,
+    options: options
+});
               var pie = document.getElementById("totalThrown").getContext("2d");
 
-              var data = [
-            {
-                value: {{ game['numberOfDarts'] }} - 21,
-                color:"#F7464A",
-                highlight: "#FF5A5E",
-                label: "Darts Missed"
-            },
-            {
-                value: 21,
-                color: "#46BFBD",
-                highlight: "#5AD3D1",
-                label: "Darts Hit"
-            }]
+var data = {
+labels: [
+        "Darts Hit",
+        "Darts Missed"
+    ],
+    datasets: [
+        {
+            data: [{{ game['numberOfDarts'] }} - 21, 21],
+            backgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ],
+            hoverBackgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ]
+        }]
+};
 
-var myDoughnutChart = new Chart(pie).Doughnut(data);
+var options = {
+                 legend: {
+                    position: 'bottom',
+                }
+                }
+
+var myDoughnutChart = new Chart(pie, {
+    type: 'doughnut',
+    data: data,
+    options: options
+});
 
 
-    </script>
+            </script>
         </div>
       </div>
  </div>
 
 </body>
-</html>

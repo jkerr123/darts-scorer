@@ -125,6 +125,7 @@ def profile_page():
 
 
 @app.route('/stats/100-darts-at')
+@loggedin
 def darts_at_stats():
     player = session['name']
     games = DartsAt.get_games(player)
@@ -138,6 +139,13 @@ def around_the_board_stats():
     games = AroundTheWorld.get_games(player)
     return render_template("around-the-board-overall.html", aroundTheBoard=games)
 
+@app.route('/stats/bobs-27')
+@loggedin
+def bobs_27_stats():
+    player = session['name']
+    games = Bobs27.get_games(player)
+    return render_template("bobs-27-overall.html", bobs27=games)
+
 
 
 
@@ -147,14 +155,38 @@ def around_the_board_stats():
 def bobs_27_summary():
     game_id = request.args.get('game_id')
     game = Bobs27.get_by_id(uuid.UUID(game_id))
-    return render_template('bobs-27-summary.html', game=game)
+    hitsOnEachNumberDict = game['hitsOnEachNumber']
+    hitsOnNumber = []
+    hitsOnNumber.append(hitsOnEachNumberDict['1'])
+    hitsOnNumber.append(hitsOnEachNumberDict['2'])
+    hitsOnNumber.append(hitsOnEachNumberDict['3'])
+    hitsOnNumber.append(hitsOnEachNumberDict['4'])
+    hitsOnNumber.append(hitsOnEachNumberDict['5'])
+    hitsOnNumber.append(hitsOnEachNumberDict['6'])
+    hitsOnNumber.append(hitsOnEachNumberDict['7'])
+    hitsOnNumber.append(hitsOnEachNumberDict['8'])
+    hitsOnNumber.append(hitsOnEachNumberDict['9'])
+    hitsOnNumber.append(hitsOnEachNumberDict['10'])
+    hitsOnNumber.append(hitsOnEachNumberDict['11'])
+    hitsOnNumber.append(hitsOnEachNumberDict['12'])
+    hitsOnNumber.append(hitsOnEachNumberDict['13'])
+    hitsOnNumber.append(hitsOnEachNumberDict['14'])
+    hitsOnNumber.append(hitsOnEachNumberDict['15'])
+    hitsOnNumber.append(hitsOnEachNumberDict['16'])
+    hitsOnNumber.append(hitsOnEachNumberDict['17'])
+    hitsOnNumber.append(hitsOnEachNumberDict['18'])
+    hitsOnNumber.append(hitsOnEachNumberDict['19'])
+    hitsOnNumber.append(hitsOnEachNumberDict['20'])
+    hitsOnNumber.append(hitsOnEachNumberDict['Bull'])
+    return render_template('bobs-27-summary.html', game=game, hits=hitsOnNumber)
 
 @app.route('/darts-at-summary', methods=['GET'])
 @loggedin
 def darts_at_summary():
     game_id = request.args.get('game_id')
     game = DartsAt.get_by_id(uuid.UUID(game_id))
-    return render_template('bobs-27-summary.html', game=game)
+
+    return render_template('darts-at-summary.html', game=game)
 
 
 @app.route('/around-the-board-summary', methods=['GET'])
@@ -198,15 +230,17 @@ def around_the_board_summary():
 def update_darts_at():
     _id = uuid.uuid4()
     data = request.get_json()
-    mode = data['mode']
     player = session['name']
     dartsThrown = data['dartsThrown']
     score = data['score']
     points = data['points']
     number = data['number']
-
-    if DartsAt.add_game(_id, player, dartsThrown, score, points, number, mode):
-        return jsonify({"message": "Done"}), 200
+    miss = data['miss']
+    single = data['single']
+    double = data['double']
+    treble = data['treble']
+    if DartsAt.add_game(_id, player, dartsThrown, score, points, number, miss, single, double, treble):
+        return jsonify({"message": "Done", "id": _id}), 200
     else:
         return jsonify({"error": "The data could not be saved"}), 201
 
@@ -217,8 +251,9 @@ def update_bobs_27():
     data = request.get_json()
     player = session['name']
     score = data['score']
-    if Bobs27.add_game(_id, player, score):
-        return jsonify({"message": "Done"}), 200
+    hitsOnEachNumber = data['hitsOnEachNumber']
+    if Bobs27.add_game(_id, player, score, hitsOnEachNumber):
+        return jsonify({"message": "Done", "id": _id}), 200
     else:
         return jsonify({"error": "The data could not be saved"}), 201
 

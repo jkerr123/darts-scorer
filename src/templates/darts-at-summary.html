@@ -1,10 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
+{% include 'top-menu.html' %}
+<script src="/static/js/Chart.js"></script>
 <body>
+ <div class="section">
+      <div class="container">
+        <div class="row">
+
+         <h1 class="text-center">100 darts at</h1>
+             <h2 class="text-center">Mode: {{ game['number'] }}</h2>
+
+                     <h2 class="text-center">Number Of Hits</h2>
+
+    <canvas id="numHits" width="400" height="100"></canvas><br><br>
+
+                                 <h2 class="text-center">Total Darts</h2><br><br>
+
+    <canvas id="totalThrown" width="400" height="100"></canvas>
+           <h3 class="text-center"> Percentage Missed: {{ game.miss }}% </h3>
+          <h3 class="text-center">  Percentage Single: {{ game.single }}% </h3>
+           <h3 class="text-center"> Percentage Double: {{ game.double }}% </h3>
+           <h3 class="text-center">Percentage Treble: {{ game.treble }}% </h3>
+
+
+
+            <script>
+             var bar = document.getElementById("numHits").getContext("2d");
+
+
+                    dartsThrownAt = {{ dartsThrownAt }}
+
+                    Chart.defaults.global.responsive = true;
+                    Chart.defaults.global.scaleBeginAtZero = true;
+                    Chart.defaults.global.scaleStepWidth = 5;
+
+                     var data = {
+                        labels: ['Miss', 'Single', 'Double', 'Treble'] ,
+                         datasets:[{
+                         data: [{{ game.miss }}, {{ game.single }}, {{ game.double }}, {{ game.treble }}],
+                         label: "Total Darts",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)"
+                        }]
+                        }
+
+                             var options = {
+                 legend: {
+                    position: 'bottom',
+                },
+                      scaleLabel: "<%=value%>",
+
+
+                      scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        },
+
+
+                yAxisMinimumInterval : 5
+
+                }
+
+var myBarChart = new Chart(bar, {
+    type: 'bar',
+    data: data,
+    options: options
+});
+              var pie = document.getElementById("totalThrown").getContext("2d");
+
+var data = {
+labels: [
+        "Darts Missed",
+        "Singles Hit",
+        "Doubles Hit",
+        "Trebles Hit"
+
+    ],
+    datasets: [
+        {
+            data: [{{ game.miss }}, {{ game.single }}, {{ game.double }}, {{ game.treble }}],
+            backgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ],
+            hoverBackgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ]
+        }]
+};
+
+var options = {
+                 legend: {
+                    position: 'bottom',
+                }
+                }
+
+var myDoughnutChart = new Chart(pie, {
+    type: 'doughnut',
+    data: data,
+    options: options
+});
+
+
+            </script>
+        </div>
+      </div>
+ </div>
 
 </body>
-</html>

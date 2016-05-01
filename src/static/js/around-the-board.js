@@ -95,11 +95,7 @@ function finishGame()
             success: function(obj)
             {
 
-            if (obj.error)
-                alert(obj.error)
-                else
-                window.location.href = 'around-the-board-summary?game_id=' + obj.id;
-            }
+
         });
 
 });

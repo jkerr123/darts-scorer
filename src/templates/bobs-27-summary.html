@@ -1,10 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
+{% include 'top-menu.html' %}
+<script src="/static/js/Chart.js"></script>
 <body>
+ <div class="section">
+      <div class="container">
+        <div class="row">
+
+         <h1 class="text-center">Bob's 27</h1>
+
+
+                     <h2 class="text-center">Hits On Each Number</h2>
+
+    <canvas id="numHits" width="400" height="100"></canvas><br><br>
+
+                                 <h2 class="text-center">Total Darts</h2><br><br>
+
+    <canvas id="totalThrown" width="400" height="100"></canvas>
+
+
+
+            <script>
+             var bar = document.getElementById("numHits").getContext("2d");
+
+
+                    dartsThrownAt = {{ hits }}
+
+                    Chart.defaults.global.responsive = true;
+                    Chart.defaults.global.scaleBeginAtZero = true;
+                    Chart.defaults.global.scaleStepWidth = 5;
+
+                     var data = {
+                        labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11','12', '13', '14', '15', '16',
+                           '17', '18', '19', '20', 'Bull'] ,
+                         datasets:[{
+                         data:  dartsThrownAt ,
+                         label: "Number Of Hits",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)"
+                        }]
+                        }
+
+                             var options = {
+                 legend: {
+                    position: 'bottom',
+                },
+                      scaleLabel: "<%=value%>",
+
+
+                      scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        },
+
+
+                yAxisMinimumInterval : 5
+
+                }
+
+var myBarChart = new Chart(bar, {
+    type: 'bar',
+    data: data,
+    options: options
+});
+              var pie = document.getElementById("totalThrown").getContext("2d");
+var dartsHit = 0;
+var dartsMissed = 0;
+
+    for (i = 0; i < dartsThrownAt.length; i++)
+    {
+        dartsHit = dartsHit +  dartsThrownAt[i];
+        dartsMissed = dartsMissed + (3 - dartsThrownAt[i]);
+    }
+
+
+var data = {
+labels: [
+        "Darts Hit",
+        "Darts Missed"
+    ],
+    datasets: [
+        {
+            data: [dartsHit, dartsMissed],
+            backgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ],
+            hoverBackgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ]
+        }]
+};
+
+var options = {
+                 legend: {
+                    position: 'bottom',
+                }
+                }
+
+var myDoughnutChart = new Chart(pie, {
+    type: 'doughnut',
+    data: data,
+    options: options
+});
+
+
+            </script>
+        </div>
+      </div>
+ </div>
 
 </body>
-</html>

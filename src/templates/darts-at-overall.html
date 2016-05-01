@@ -1,13 +1,160 @@
 {% include 'top-menu.html' %}
 <script src="/static/js/Chart.js"></script>
+<script src="/static/js/list.js"></script>
 
 <body>
+
+<script>
+    var points= [];
+    var score = [];
+    var date = [];
+
+      var twentyScore = [];
+      var twentyPoints = [];
+      var twentyDate = [];
+
+       var nineteenPoints= [];
+    var nineteenScore = [];
+    var nineteenDate = [];
+
+     var eighteenPoints= [];
+    var eighteenScore = [];
+    var eighteenDate = [];
+
+     var seventeenPoints= [];
+    var seventeenScore = [];
+    var seventeenDate = [];
+
+     var sixteenPoints= [];
+    var sixteenScore = [];
+    var sixteenDate = [];
+
+     var fifteenPoints= [];
+    var fifteenScore = [];
+    var fifteenDate = [];
+
+     var bullPoints= [];
+    var bullScore = [];
+    var bullDate = [];
+
+</script>
 
 <h1 class="text-center">100 Darts At</h1>
 
              <h2 class="text-center">Score Total</h2>
+Filter by: <select id="gameTypeLine">
+
+  <option value="All">All</option>
+  <option value="20">20</option>
+  <option value="19">19</option>
+  <option value="18">18</option>
+  <option value="17">17</option>
+    <option value="16">16</option>
+  <option value="15">15</option>
+  <option value="Bull">Bull</option>
+
+</select>
+        <div id = "linechart">
 
        <canvas id="darts-at-chart" height="50"></canvas>
+</div>
+
+Filter by: <select id="gameTypeTable">
+
+  <option value="All">All</option>
+  <option value="20">20</option>
+  <option value="19">19</option>
+  <option value="18">18</option>
+  <option value="17">17</option>
+    <option value="16">16</option>
+  <option value="15">15</option>
+  <option value="Bull">Bull</option>
+
+</select>
+<div id="games">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th class="sort" data-sort="date" style="cursor: pointer">Date</th>
+        <th class="sort" data-sort="score" style="cursor: pointer">Score</th>
+                  <th class="sort" data-sort="points" style="cursor: pointer">Points</th>
+                            <th class="sort" data-sort="number" style="cursor: pointer">Number</th>
+
+
+      </tr>
+                        </thead>
+                        <tbody class="list">
+            {% for game in dartsAt %}
+            <script>
+                                      date.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      score.push("{{game.score}}")
+                      points.push("{{game.points}}")
+
+                number = "{{game.number}}"
+           if (number == '20')
+           {
+                       twentyDate.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      twentyScore.push("{{game.score}}")
+                      twentyPoints.push("{{game.points}}")
+           }
+           else if (number == '19')
+           {
+                       nineteenDate.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      nineteenScore.push("{{game.score}}")
+                      nineteenPoints.push("{{game.points}}")
+           }
+                            else if (number == '18')
+           {
+                       eighteenDate.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      eighteenScore.push("{{game.score}}")
+                      eighteenPoints.push("{{game.points}}")
+           }
+                                             else if (number == '17')
+           {
+                       seventeenDate.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      seventeenScore.push("{{game.score}}")
+                      seventeenPoints.push("{{game.points}}")
+           }
+                                                       else if (number == '16')
+           {
+                       sixteenDate.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      sixteenScore.push("{{game.score}}")
+                      sixteenPoints.push("{{game.points}}")
+           }
+                                                                  else if (number == '15')
+           {
+                       fifteenDate.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      fifteenScore.push("{{game.score}}")
+                      fifteenPoints.push("{{game.points}}")
+           }
+                                                                  else if (number == 'Bull')
+           {
+                       bullDate.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      bullScore.push("{{game.score}}")
+                      bullPoints.push("{{game.points}}")
+           }
+
+
+
+
+
+
+            </script>
+
+                              <tr onclick="window.location.href = '../darts-at-summary?game_id={{ game['_id'] }}';"
+                                style="cursor: pointer">
+    <td class="date">{{ game.date.strftime('%Y-%m-%d') }}</td>
+    <td class="score">{{ game.score }}</td>
+        <td class="points">{{ game.points }}</td>
+
+    <td class="number">{{ game.number }}</td>
+          </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+                    </div>
+</div>
 
 <script>
                       var ctx = document.getElementById("darts-at-chart").getContext("2d");
@@ -17,37 +164,177 @@
                     Chart.defaults.global.scaleStepWidth = 5;
 
 
-                      var dartsAtDates = [];
-                      var dartsAtScores = [];
-                      {% for game in dartsAt %}
-                      dartsAtDates.push("{{ game.date.strftime('%Y-%m-%d') }}")
-                      dartsAtScores.push("{{game.points}}")
-                      {% endfor %}
+
 
                         var data = {
-                        labels: dartsAtDates,
+                        labels: date,
                          datasets:[{
-                         data: dartsAtScores,
+                         data: score,
+                         label: "Score",
+                        backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)"
+                        },
+
+      {
+                         data: points,
                          label: "Points",
-                        fillColor: "rgba(220,220,220,0.2)",
-                        strokeColor: "rgba(220,220,220,1)",
-                        pointColor: "rgba(220,220,220,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(220,220,220,1)"
-                        }]
+                        fillColor: "rgba(68,170,153,0.2)",
+                        strokeColor: "rgba(68,170,153,1)",
+                        pointColor: "rgba(68,170,153,1)",
+                        pointStrokeColor: "#666",
+                        pointHighlightFill: "#666",
+                        pointHighlightStroke: "rgba(68,170,153,1)"
+
+        }]
+
                         }
 
 
-                var options = {
-                legend: true,
+               var options = {
+                legend: {
+                    position: 'bottom',
+                },
                       scaleLabel: "<%=value%>",
+
+                      scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        },
 
                 yAxisMinimumInterval : 5
 
                 }
 
-           var dartsAtLine = new Chart(ctx).Line(data,options);
+                      var dartsAtLine = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: options
+});
+
+var settings = {
+                    valueNames: [ 'date', 'score', 'points', 'number' ]
+                                };
+
+                                var games = new List('games', settings);
+
+                                $("#gameTypeLine").change(function (evt) {
+
+          var lineChartCanvas = document.getElementById("linechart");
+           lineChartCanvas.innerHTML = "";
+           $('#linechart').append('<canvas id="darts-at-chart" height="50"></canvas>');
+
+
+       var newLabels;
+       var newData;
+
+    var gameSelection = $("#gameTypeLine").val();
+    data.datasets.splice(0, 0);
+          if (gameSelection == "All")
+          {
+              newLabels = date
+            newScore = score
+            newPoints = points
+          }
+          else if(gameSelection == "20")
+          {
+            newLabels = twentyDate
+            newScore = twentyScore
+            newPoints = twentyPoints
+          }
+                else if(gameSelection == "19")
+          {
+            newLabels = nineteenDate
+            newScore = nineteenScore
+            newPoints = nineteenPoints
+          }
+                else if(gameSelection == "18")
+          {
+            newLabels = eighteenDate
+            newScore = eighteenScore
+            newPoints = eighteenPoints
+          }
+                else if(gameSelection == "17")
+          {
+            newLabels = seventeenDate
+            newScore = seventeenScore
+            newPoints = seventeenPoints
+          }
+                else if(gameSelection == "16")
+          {
+            newLabels = sixteenDate
+            newScore = sixteenScore
+            newPoints = sixteenPoints
+          }
+                else if(gameSelection == "15")
+          {
+            newLabels = fifteenDate
+            newScore = fifteenScore
+            newPoints = fifteenPoints
+          }
+                else if(gameSelection == "Bull")
+          {
+            newLabels = bullDate
+            newScore = bullScore
+            newPoints = bullPoints
+          }
+
+
+
+
+
+                 var theNewData = {
+                        labels: newLabels,
+                         datasets:[{
+                         data: newScore,
+                         label: "Score",
+                        backgroundColor: "rgba(75,192,192,0.4)",
+            borderColor: "rgba(75,192,192,1)",
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)"
+                        },
+
+      {
+                         data: newPoints,
+                         label: "Points",
+                        fillColor: "rgba(68,170,153,0.2)",
+                        strokeColor: "rgba(68,170,153,1)",
+                        pointColor: "rgba(68,170,153,1)",
+                        pointStrokeColor: "#666",
+                        pointHighlightFill: "#666",
+                        pointHighlightStroke: "rgba(68,170,153,1)"
+
+        }]
+                        }
+                  var ctx = $("#darts-at-chart").get(0).getContext("2d");
+
+    var dartsAtLine = new Chart(ctx, {
+    type: 'line',
+    data: theNewData,
+    options: options
+});
+});
+
+$('#gameTypeTable').change(function () {
+    var selection = this.value;
+    if (selection != 'All') {
+        games.filter(function(list) {
+            if (list.values().number == selection)
+            return true;
+        });
+    } else {
+        games.filter();
+    }
+});
+
                   </script>
 
 </body>

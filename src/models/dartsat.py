@@ -10,10 +10,11 @@ COLLECTION = "dartsAt"
 class DartsAt(object):
 
     @staticmethod
-    def add_game(_id, name, numberOfDarts, score, points, number, mode):
+    def add_game(_id, name, numberOfDarts, score, points, number, miss, single, double, treble):
 
-        if Database.insert(COLLECTION, {"_id": _id, "mode": mode, "username": name, "numberOfDarts": numberOfDarts, "score": score,
-                                        "points": points, "number": number, "date": datetime.now()}):
+        if Database.insert(COLLECTION, {"_id": _id, "username": name, "numberOfDarts": numberOfDarts, "score": score,
+                                        "points": points, "number": number, "date": datetime.now(),
+                                        "miss": miss, "single": single, "double": double, "treble": treble}):
             return True
         return False
 
@@ -30,8 +31,8 @@ class DartsAt(object):
     @staticmethod
     def get_leaderboard(numResults = None):
         if numResults:
-            results = Database.find(COLLECTION, {}, "points", 1, numResults)
+            results = Database.find(COLLECTION, {}, "points", -1, numResults)
         else:
-            results = Database.find(COLLECTION, {}, "points", 1)
+            results = Database.find(COLLECTION, {}, "points", -1)
 
         return results

@@ -1,0 +1,122 @@
+{% include 'top-menu.html' %}
+<script src="/static/js/Chart.js"></script>
+<script src="/static/js/list.js"></script>
+<script>
+
+                      var bobs27Dates = [];
+                      var bobs27Scores = [];
+
+
+
+</script>
+
+<body>
+
+             <h1 class="text-center">Bob's 27 Overall</h1>
+<div class="container-fluid">
+             <h2 class="text-center">Score</h2>
+
+        <div id = "linechart">
+       <canvas id="bobs-27-chart" height="50"></canvas>
+            </div>
+</div>
+
+             <div class="container-fluid">
+             <h2 class="text-center">Game List</h2>
+
+<div id="games">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th class="sort" data-sort="date" style="cursor: pointer">Date</th>
+        <th class="sort" data-sort="score" style="cursor: pointer">Score</th>
+
+
+      </tr>
+                        </thead>
+                        <tbody class="list">
+            {% for game in bobs27 %}
+            <script>
+                                      bobs27Dates.push("{{ game.date.strftime('%Y-%m-%d') }}")
+                      bobs27Scores.push("{{game.score}}")
+
+
+
+
+            </script>
+
+                              <tr onclick="window.location.href = '../bobs-27-summary?game_id={{ game['_id'] }}';"
+                                style="cursor: pointer">
+    <td class="date">{{ game.date.strftime('%Y-%m-%d') }}</td>
+    <td class="score">{{ game.score }}</td>
+
+          </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+                    </div>
+</div>
+</div>
+
+ <script>
+
+
+
+                  var ctx = document.getElementById("bobs-27-chart").getContext("2d");
+
+                    Chart.defaults.global.responsive = true;
+                    Chart.defaults.global.scaleBeginAtZero = true;
+                    Chart.defaults.global.scaleStepWidth = 5;
+
+
+
+
+                        var data = {
+                        labels: bobs27Dates,
+                         datasets:[{
+                         data: bobs27Scores,
+                         label: "Score",
+                        fillColor: "rgba(220,220,220,0.2)",
+                        strokeColor: "rgba(220,220,220,1)",
+                        pointColor: "rgba(220,220,220,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)"
+                        }]
+                        }
+
+
+                var options = {
+                legend: {
+                    position: 'bottom',
+                },
+                      scaleLabel: "<%=value%>",
+
+                      scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        },
+
+                yAxisMinimumInterval : 5
+
+                }
+
+           var aroundTheBoardLine = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: options
+});
+
+                             var settings = {
+                    valueNames: [ 'date', 'score' ]
+                                };
+
+
+                  </script>
+</body>
+
+</html>
