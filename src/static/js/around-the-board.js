@@ -95,7 +95,7 @@ function finishGame()
             success: function(obj)
             {
 
-
+}
         });
 
 });
