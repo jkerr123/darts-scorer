@@ -94,8 +94,8 @@ function finishGame()
             contentType: "application/json",
             success: function(obj)
             {
-
-}
+window.location.href = 'around-the-board-summary?game_id=' + obj.id;
+            }
         });
 
 });
