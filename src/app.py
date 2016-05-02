@@ -139,15 +139,13 @@ def around_the_board_stats():
     games = AroundTheWorld.get_games(player)
     return render_template("around-the-board-overall.html", aroundTheBoard=games)
 
+
 @app.route('/stats/bobs-27')
 @loggedin
 def bobs_27_stats():
     player = session['name']
     games = Bobs27.get_games(player)
     return render_template("bobs-27-overall.html", bobs27=games)
-
-
-
 
 
 @app.route('/bobs-27-summary', methods=['GET'])
@@ -179,6 +177,7 @@ def bobs_27_summary():
     hitsOnNumber.append(hitsOnEachNumberDict['20'])
     hitsOnNumber.append(hitsOnEachNumberDict['Bull'])
     return render_template('bobs-27-summary.html', game=game, hits=hitsOnNumber)
+
 
 @app.route('/darts-at-summary', methods=['GET'])
 @loggedin
@@ -227,6 +226,7 @@ def around_the_board_summary():
 
 
 @app.route("/update/100-darts-at", methods=["POST"])
+@cross_origin()
 def update_darts_at():
     _id = uuid.uuid4()
     data = request.get_json()
@@ -246,6 +246,7 @@ def update_darts_at():
 
 
 @app.route("/update/bobs-27", methods=["POST"])
+@cross_origin()
 def update_bobs_27():
     _id = uuid.uuid4()
     data = request.get_json()
@@ -259,6 +260,7 @@ def update_bobs_27():
 
 
 @app.route("/update/around-the-board", methods=["POST"])
+@cross_origin()
 def update_around_the_board():
     _id = uuid.uuid4()
     data = request.get_json()
@@ -274,6 +276,7 @@ def update_around_the_board():
 
 
 @app.route('/auth/register', methods=["POST"])
+@cross_origin()
 def register_user():
     name = request.form['username']
     password = sha256(request.form['password'].encode('utf-8')).hexdigest()

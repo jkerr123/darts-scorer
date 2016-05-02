@@ -85,11 +85,9 @@ function update(){
 
 function finishGame()
 {
-    bootbox.alert("You have a score of " + score + "!", save_results());
-}
+    bootbox.alert("You have a score of " + score + "!",function(){
 
-function save_results()
-{
+
     data = {"score": score, "hitsOnEachNumber": hitsOnEachNumber}
 
     $.ajax({
@@ -100,13 +98,15 @@ function save_results()
             contentType: "application/json",
             success: function(obj)
             {
-                      if (obj.error)
+                if (obj.error)
                 alert(obj.error)
                 else
                 window.location.href = 'bobs-27-summary?game_id=' + obj.id;
             }
 
         });
+        });
+
 
 
 }
