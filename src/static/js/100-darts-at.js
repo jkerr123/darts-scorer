@@ -79,11 +79,10 @@ function update(){
 
 function finishGame()
 {
-    bootbox.alert("You have a total of  " + points + " which is a score of " + score + "!", save_results());
+    bootbox.alert("You have a total of  " + points + " which is a score of " + score + "!",function(){
 }
 
-function save_results()
-{
+
     data = {"points": points, "score": score, "dartsThrown": dartsThrown, "number": numberToHit, "miss": miss, "single": single, "double": double, "treble": treble}
 
     $.ajax({
