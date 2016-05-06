@@ -97,4 +97,5 @@ function finishGame()
 window.location.href = 'around-the-board-summary?game_id=' + obj.id;
             }
         });
+});
 }

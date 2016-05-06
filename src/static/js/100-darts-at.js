@@ -80,7 +80,7 @@ function update(){
 function finishGame()
 {
     bootbox.alert("You have a total of  " + points + " which is a score of " + score + "!",function(){
-}
+
 
 
     data = {"points": points, "score": score, "dartsThrown": dartsThrown, "number": numberToHit, "miss": miss, "single": single, "double": double, "treble": treble}
@@ -103,4 +103,5 @@ function finishGame()
         });
 
 
+});
 }
